@@ -19,6 +19,7 @@ class CustomerModel extends Model
         'image',
         'prio',
         'handler',
-        'status'
+        'status',
+        'created_at'
     ];
 }

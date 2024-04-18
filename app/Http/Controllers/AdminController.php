@@ -106,37 +106,36 @@ class AdminController extends Controller
     }
 
     public function line(){
-
-        $eventCounts = CustomerModel::select(DB::raw('DAYNAME(created_at) AS day_of_week'), DB::raw('COUNT(*) AS count'))
-        ->groupBy('day_of_week')
-        ->orderBy(DB::raw('DAYOFWEEK(created_at)'), 'ASC')
-        ->get();
+        // Get the start and end dates of the current week
+        $startOfWeek = date('Y-m-d', strtotime('last sunday'));
+        $endOfWeek = date('Y-m-d', strtotime('next saturday'));
     
-    // Initialize arrays to store day names and counts
-    $daysOfWeek = [];
-    $countByDay = [];
+        // Fetch data for the current week
+        $eventCounts = CustomerModel::whereBetween('created_at', [$startOfWeek, $endOfWeek])->get();
     
-    // Initialize an array with days of the week in the correct order
-    $weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+        // Initialize arrays to store day names and counts
+        $daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        $countByDay = array_fill_keys($daysOfWeek, 0);
     
-    // Loop through each day of the week and initialize the count to 0
-    foreach ($weekdays as $day) {
-        $daysOfWeek[] = $day;
-        $countByDay[$day] = 0;
-    }
+        // Loop through each data entry and update counts
+        foreach ($eventCounts as $count) {
+            $dayOfWeek = date('l', strtotime($count->created_at)); // Get day of week for the entry
+            $countByDay[$dayOfWeek]++; // Increment count for that day of the week
+        }
     
-    // Update the countByDay array with actual counts from the database query
-    foreach ($eventCounts as $count) {
-        $countByDay[$count->day_of_week] = $count->count;
-    }
-
+        // Rearrange the counts starting from Sunday
+        $startIndex = array_search('Sunday', $daysOfWeek); // Find index of Sunday
+        $countByDay = array_merge(array_slice($countByDay, $startIndex), array_slice($countByDay, 0, $startIndex));
+    
         $data = [
-            'labels' => ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+            'labels' => $daysOfWeek,
             'values' => array_values($countByDay)
         ];
-
+    
         return response()->json($data);
     }
+    
+    
 
     public function bar(){
         //$total = CustomerModel::count();
