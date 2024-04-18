@@ -29,6 +29,7 @@ Route::post('/store', [CustomerController::class,'store']);
 Route::post('/update', [CustomerController::class,'update']);
 Route::post('/edit', [CustomerController::class, 'edit']);
 Route::post('/delete', [CustomerController::class, 'delete']);
+Route::post('/note', [CustomerController::class, 'note']);
 
 
 Route::get('/image/{id}', [CustomerController::class, 'showImg'])->name('image.show');

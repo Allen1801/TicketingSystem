@@ -38,6 +38,7 @@
                         <thead>
                             <tr>
                                 <th>Ticket No.</th>
+                                <th>Customer ID</th>
                                 <th>Name</th>
                                 <th>Email</th>
                                 <th>Subject</th>
@@ -198,6 +199,47 @@
     </div>
 </div>
 
+<!-- NOTE Modal -->
+
+<div class="modal" id="noteModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Data</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Your form for editing data goes here -->
+                <form method="POST" action="javascript:void(0)" name="noteForm" id="noteForm" enctype="multipart/form-data">
+                        @csrf
+
+                        <input type="hidden" name="id" id="id" >
+                        
+
+                        <div class="row mb-3 modal-lg">
+                            <label for="subject" class="col-md-4 col-form-label text-md-end">{{ __('Note/Remarks') }}</label>
+
+                            <div class="col-md-6 .input-lg">
+                                <textarea id="note" name="note" rows="4" cols="50"></textarea>
+
+                                @error('name')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" id="btn-save"class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script type="text/javascript">
 
 TODO://NOTIFICATION
@@ -246,11 +288,13 @@ $(document).ready( function () {
                 serverSide: true,
                 //select: true,
                 "order": [[0, 'desc']],
-                columnDefs: [{ width: '11%', targets: 8 },
-                            {width: '15%',targets: 1}],
+                columnDefs: [{ width: '15%', targets: 9 },
+                            {width: '15%',targets: 2},
+                            {width: '5%',targets: 7}],
                 ajax: '{!! url('/datatables') !!}',
                 columns: [
                     { data: 'id', name: 'id' },
+                    { data: 'customer_id', name: 'Customer_id' },
                     {data: 'user_name', name: 'user_name'},
                     { data: 'email', name: 'email' },
                     { data: 'subject', name: 'subject' },
@@ -268,6 +312,46 @@ $(document).ready( function () {
     function add(){
         $('#editModal').modal('show');
     }
+
+    function noteFunc(id){
+        $.ajax({
+        type:"POST",
+        url: "{{ url('/note') }}",
+        data: { id: id },
+        dataType: 'json',
+        success: function(res){
+            $('#EditModal').html("Edit Employee");
+            $('#noteModal').modal('show');
+            $('#id').val(res.id); 
+            $('#note').val(res.remarks);
+            console.log(res);
+        }
+    });
+}
+
+$('#noteForm').submit(function(e){
+        e.preventDefault();
+        var formData = new FormData(this);
+        $.ajax({
+            type: 'POST',
+            url: "{{url( '/noteupdate' )}}",
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: (data) =>{
+                $("#editModal").modal('hide');
+                $("#btn-save").html('Submit');
+                $("#btn-save"). attr("disabled", false);
+                $('#DataTable').DataTable().ajax.reload();
+                console.log(data);
+            },
+            error: function(data){
+                console.log(data);
+            }
+
+        });
+    });
 
     $('#updateForm').submit(function(e){
         e.preventDefault();
