@@ -11,19 +11,22 @@ use Pusher\Pusher;
 class CustomerController extends Controller
 {
     public function update(Request  $request) {
-        $ticket_id = $request->id;
 
-        $updateTicket = CustomerModel::updateOrCreate([
-            'id' => $ticket_id,
-        ],
-        [
+        $ticekt_id = $request->id;
+        
+        $ticket = [
+
+            'prio' =>  $request->prio,
             'handler' => $request->handler,
             'status' => $request->status,
-            'prio' => $request->prio,
-            //'remarks' => $request->note,
-        ]);
-        return Response()->json($updateTicket);
+            // 'remarks' => 'none'
+        ];
+        $update = CustomerModel::where('id', $ticekt_id)->update($ticket);
 
+        return response()->json([
+            'status' => 200,
+            'data' => $update,
+        ]);
     }
     
     public function store(Request $request){
