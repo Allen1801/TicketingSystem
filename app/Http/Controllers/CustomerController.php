@@ -11,8 +11,8 @@ use Pusher\Pusher;
 class CustomerController extends Controller
 {
     public function update(Request  $request) {
+
         $ticekt_id = $request->id;
-        
         
         $ticket = [
 
@@ -52,7 +52,7 @@ class CustomerController extends Controller
             'prio' =>  '1',
             'handler' => 'None',
             'status' => 'New',
-            'remarks' => 'none'
+            
         ];
 
         
@@ -76,6 +76,29 @@ class CustomerController extends Controller
         $id = $request->id;
         $data = CustomerModel::find($id);
         return response()->json($data);
+    }
+
+    public function note(Request $request)
+    {   
+        // $where = array('id' => $request->id);
+        // $employee  = CustomerModel::where($where)->first();
+        // return Response()->json($employee);
+
+        $id = $request->id;
+        $data = CustomerModel::find($id);
+        return response()->json($data);
+    }
+
+    public function noteupdate(Request  $request) {
+        $ticket_id = $request->id;
+
+        $updateTicket = CustomerModel::updateOrCreate([
+            'id' => $ticket_id,
+        ],
+        [
+            'remarks' => $request->note,
+        ]);
+        return Response()->json($updateTicket);
     }
 
     public function delete(Request $request){
