@@ -104,7 +104,7 @@ class CustomerController extends Controller
         return response()->json([
             'status' => 200,
             'data' => $updatenote,
-            'received_id' => $ticket_id,
+            // 'received_id' => $ticket_id,
         ]);
     }
 

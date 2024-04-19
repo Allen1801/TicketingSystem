@@ -72,7 +72,7 @@
                 <form method="POST" action="" name="updateForm" id="updateForm" enctype="multipart/form-data">
                         @csrf
 
-                        <input type="text" name="id" id="id" >
+                        <input type="hidden" name="id" id="id" >
                         <input type="hidden" name="dataimage" id="dataimage" >
 
                         <div class="row mb-3 modal-lg">
@@ -216,7 +216,7 @@
                 <form method="POST" action="" name="remarksForm" id="remarksForm" enctype="multipart/form-data">
                         @csrf
 
-                        <input type="text" name="id" id="idnote" >
+                        <input type="hidden" name="id" id="idnote" >
 
                         <div class="row mb-3 modal-lg">
                             <label for="remarks" class="col-md-4 col-form-label text-md-end">{{ __('Note/Remarks') }}</label>
