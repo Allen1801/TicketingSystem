@@ -12,16 +12,21 @@ class CustomerController extends Controller
 {
     public function update(Request  $request) {
         $ticekt_id = $request->id;
+        
+        
+        $ticket = [
 
-        $updateTicket = CustomerModel::updateOrCreate([
-            'id' => $ticekt_id,
-        ],
-        [
+            'prio' =>  $request->prio,
             'handler' => $request->handler,
             'status' => $request->status,
-            'prio' => $request->prio,
+            // 'remarks' => 'none'
+        ];
+        $update = CustomerModel::where('id', $ticekt_id)->update($ticket);
+
+        return response()->json([
+            'status' => 200,
+            'data' => $update,
         ]);
-        return Response()->json($updateTicket);
     }
     
     public function store(Request $request){
@@ -46,7 +51,8 @@ class CustomerController extends Controller
             'image' => $filename,
             'prio' =>  '1',
             'handler' => 'None',
-            'status' => 'New'
+            'status' => 'New',
+            'remarks' => 'none'
         ];
 
         

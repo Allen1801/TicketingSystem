@@ -20,6 +20,7 @@ class CustomerModel extends Model
         'prio',
         'handler',
         'status',
+        'remarks',
         'created_at'
     ];
 }
