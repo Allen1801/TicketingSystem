@@ -23,7 +23,7 @@
                         
                     </select>
 
-                    <label for="filter-dropdowN-priority">Priority:</label>
+                    <label for="filter-dropdown-priority">Priority:</label>
                     <select id="filter-dropdown-priority">
                         <option value="">All</option>
                         <option value="0">Very Low</option>
@@ -72,7 +72,7 @@
                 <form method="POST" action="" name="updateForm" id="updateForm" enctype="multipart/form-data">
                         @csrf
 
-                        <input type="hidden" name="id" id="id" >
+                        <input type="text" name="id" id="id" >
                         <input type="hidden" name="dataimage" id="dataimage" >
 
                         <div class="row mb-3 modal-lg">
@@ -213,18 +213,16 @@
             </div>
             <div class="modal-body">
                 <!-- Your form for editing data goes here -->
-                <form method="POST" action="javascript:void(0)" name="noteForm" id="noteForm" enctype="multipart/form-data">
+                <form method="POST" action="" name="remarksForm" id="remarksForm" enctype="multipart/form-data">
                         @csrf
 
-                        <input type="hidden" name="id" id="id" >
-                        <input type="hidden" name="dataimage" id="dataimage" >
+                        <input type="text" name="id" id="idnote" >
 
                         <div class="row mb-3 modal-lg">
                             <label for="remarks" class="col-md-4 col-form-label text-md-end">{{ __('Note/Remarks') }}</label>
 
                             <div class="col-md-6 .input-lg">
-                                <!-- <input id="subject" type="text" class="form-control  @error('name') is-invalid @enderror" name="subject" disabled  required autocomplete="subject" autofocus> -->
-                                <textarea name="remarks" id="remarks" cols="30" rows="10"></textarea>
+                                <textarea name="remarks" id="remarks" cols="50" rows="5"></textarea>
                                 @error('name')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -235,49 +233,8 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" id="btn-save"class="btn btn-primary">Save changes</button>
+                <button type="submit" id="btn-save1" class="btn btn-primary">Save changes</button>
                 </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- NOTE Modal -->
-
-<div class="modal" id="noteModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Edit Data</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <!-- Your form for editing data goes here -->
-                <form method="POST" action="javascript:void(0)" name="noteForm" id="noteForm" enctype="multipart/form-data">
-                        @csrf
-
-                        <input type="hidden" name="id" id="id" >
-                        
-
-                        <div class="row mb-3 modal-lg">
-                            <label for="subject" class="col-md-4 col-form-label text-md-end">{{ __('Note/Remarks') }}</label>
-
-                            <div class="col-md-6 .input-lg">
-                                <textarea id="note" name="note" rows="4" cols="50"></textarea>
-
-                                @error('name')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" id="btn-save"class="btn btn-primary">Save changes</button>
             </div>
         </div>
     </div>
@@ -331,8 +288,8 @@ $(document).ready( function () {
                 serverSide: true,
                 //select: true,
                 "order": [[0, 'desc']],
-                columnDefs: [{ width: '12%', targets: 8 },
-                            {width: '15%',targets: 1}],
+                columnDefs: [{ width: '12%', targets: 9 },
+                            {width: '15%',targets: 2}],
                 ajax: '{!! url('/datatables') !!}',
                 columns: [
                     { data: 'id', name: 'id' },
@@ -350,47 +307,45 @@ $(document).ready( function () {
             });
         });
 
-
-    function add(){
-        $('#editModal').modal('show');
-    }
-
     function noteFunc(id){
         $.ajax({
         type:"POST",
-        url: "{{ url('/note') }}",
+        url: "{{ url('/edit') }}",
         data: { id: id },
         dataType: 'json',
         success: function(res){
-            $('#EditModal').html("Edit Employee");
+            $('#NoteModal').html("Edit Employee");
             $('#noteModal').modal('show');
-            $('#id').val(res.id); 
-            $('#note').val(res.remarks);
+            $('#idnote').val(res.id); 
+            $('#remarks').val(res.remarks);
             console.log(res);
         }
     });
 }
 
-$('#noteForm').submit(function(e){
+$('#remarksForm').submit(function(e){
         e.preventDefault();
         var formData = new FormData(this);
         $.ajax({
             type: 'POST',
-            url: "{{url( '/noteupdate' )}}",
+            url: "{{url( '/updatenote' )}}",
             data: formData,
             cache: false,
             contentType: false,
             processData: false,
-            success: (data) =>{
-                $("#editModal").modal('hide');
-                $("#btn-save").html('Submit');
-                $("#btn-save"). attr("disabled", false);
+            success: (res) =>{
+                if (res.status == 200){
+                    Swal.fire({
+                        title: "Ticket Successfully Edited",
+                        icon: "success"
+                    });
+                }
+                $("#noteModal").modal('hide');
+                $("#btn-save1").html('Submit');
+                $("#btn-save1"). attr("disabled", false);
                 $('#DataTable').DataTable().ajax.reload();
-                console.log(data);
+                console.log(res);
             },
-            error: function(data){
-                console.log(data);
-            }
 
         });
     });

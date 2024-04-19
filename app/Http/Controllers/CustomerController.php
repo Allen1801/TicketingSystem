@@ -10,6 +10,18 @@ use Pusher\Pusher;
 
 class CustomerController extends Controller
 {
+
+    public function edit(Request $request)
+    {   
+        // $where = array('id' => $request->id);
+        // $employee  = CustomerModel::where($where)->first();
+        // return Response()->json($employee);
+
+        $id = $request->id;
+        $data = CustomerModel::find($id);
+        return response()->json($data);
+    }
+
     public function update(Request  $request) {
 
         $ticekt_id = $request->id;
@@ -19,7 +31,8 @@ class CustomerController extends Controller
             'prio' =>  $request->prio,
             'handler' => $request->handler,
             'status' => $request->status,
-            // 'remarks' => 'none'
+            //'remarks' => $request->remarks
+            
         ];
         $update = CustomerModel::where('id', $ticekt_id)->update($ticket);
 
@@ -64,41 +77,35 @@ class CustomerController extends Controller
         return response()->json([
             'status' => 200,
             'data' => $insert,
+            
         ]);
     }
-    
-    public function edit(Request $request)
-    {   
-        // $where = array('id' => $request->id);
-        // $employee  = CustomerModel::where($where)->first();
-        // return Response()->json($employee);
 
-        $id = $request->id;
-        $data = CustomerModel::find($id);
-        return response()->json($data);
-    }
+    // public function note(Request $request)
+    // {   
+    //     // $where = array('id' => $request->id);
+    //     // $employee  = CustomerModel::where($where)->first();
+    //     // return Response()->json($employee);
 
-    public function note(Request $request)
-    {   
-        // $where = array('id' => $request->id);
-        // $employee  = CustomerModel::where($where)->first();
-        // return Response()->json($employee);
+    //     $id = $request->id;
+    //     $data = CustomerModel::find($id);
+    //     return response()->json($data);
+    // }
 
-        $id = $request->id;
-        $data = CustomerModel::find($id);
-        return response()->json($data);
-    }
-
-    public function noteupdate(Request  $request) {
+    public function updatenote(Request $request) {
         $ticket_id = $request->id;
-
-        $updateTicket = CustomerModel::updateOrCreate([
-            'id' => $ticket_id,
-        ],
-        [
-            'remarks' => $request->note,
+        
+        $ticketnote = [
+            'remarks' => $request->remarks
+        ];
+        
+        $updatenote = CustomerModel::where('id', $ticket_id)->update($ticketnote);
+    
+        return response()->json([
+            'status' => 200,
+            'data' => $updatenote,
+            'received_id' => $ticket_id,
         ]);
-        return Response()->json($updateTicket);
     }
 
     public function delete(Request $request){
