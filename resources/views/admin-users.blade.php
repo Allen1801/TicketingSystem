@@ -10,9 +10,9 @@
             <div class="card">
                 <div class="card-header">{{__('Admin Acconts')}}</div>
                 <div class="card-body">
-                    <a href="javascript:void(0)" class="btn btn-primary" onclick="add()">Add Customer</a>
+                    <a href="javascript:void(0)" class="btn btn-primary" onclick="add()">Add Admin Account</a>
 
-                    <br>
+                    <p></p>
 
                     <table class="table table-bordered" id="UserTable">
                         <thead>
@@ -84,7 +84,6 @@
 
                             <div class="col-md-6">
                                 <select class="form-select" name="role" id="role">
-                                    <option value="0">User</option>
                                     <option value="1">Admin</option>
                                 </select>
 
@@ -100,11 +99,7 @@
                             <label for="dept" class="col-md-4 col-form-label text-md-end">{{ __('Departement') }}</label>
 
                             <div class="col-md-6">
-                                <select class="form-select" name="dept" id="dept">
-                                    <option value="HR">HR</option>
-                                    <option value="Finance">Finance</option>
-                                    <option value="MIS">MIS</option>
-                                </select>
+                            <select id="dept" name="dept" class="form-control"></select>
 
                                 @error('email')
                                     <span class="invalid-feedback" role="alert">
@@ -184,7 +179,7 @@ var channel = pusher.subscribe('my-channel');
                 serverSide: true,
                 //select: true,
                 columnDefs: [{ width: '15%', targets: 5 }],
-                ajax: '{!! url('/customer') !!}',
+                ajax: '{!! url('/admin-users') !!}',
                 columns: [
                     { data: 'id', name: 'id' },
                     { data: 'name', name: 'name' },
@@ -241,6 +236,25 @@ $.ajax({
     },
 });
 }
+
+$(document).ready(function() {
+    // Fetch department choices from the server
+    $.ajax({
+        url: '{{url ('/fetchDept')}}',
+        type: 'POST',
+        dataType: 'json',
+        success: function(data) {
+            // Update dropdown with fetched data
+            var departmentDropdown = $('#dept');
+            $.each(data, function(index, departments) {
+                departmentDropdown.append('<option value="' + departments.department + '">' + departments.department + '</option>');
+            });
+        },
+        error: function(xhr, status, error) {
+            console.error('Error fetching departments:', error);
+        }
+    });
+});
 </script>
 
 @endsection

@@ -10,9 +10,9 @@
             <div class="card">
                 <div class="card-header">{{__('Customers')}}</div>
                 <div class="card-body">
-                    <a href="javascript:void(0)" class="btn btn-primary" onclick="add()">Add Customer</a>
+                    <!-- <a href="javascript:void(0)" class="btn btn-primary" onclick="add()">Add Customer</a> -->
 
-                    <br>
+                    <!-- <br> -->
 
                     <table class="table table-bordered" id="UserTable">
                         <thead>

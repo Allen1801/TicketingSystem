@@ -47,7 +47,11 @@ Route::get('/admin-users', [AdminController::class, 'adminusers'])->name('admin-
 Route::get('/department', [AdminController::class, 'department'])->name('department');
 Route::get('/main', [AdminController::class, 'main'])->name('main');
 Route::post('/insert', [AdminController::class,'insert']);
+Route::post('/insertDept', [AdminController::class,'insertDept']);
+Route::post('/editDept', [AdminController::class,'editDept']);
 Route::post('/remove', [AdminController::class,'remove']);
+Route::post('/Deptremove', [AdminController::class,'Deptremove']);
+Route::post('/fetchDept', [AdminController::class,'fetchDept']);
 
 Route::get('/chart', [AdminController::class, 'chart']);
 Route::get('/line', [AdminController::class, 'line']);

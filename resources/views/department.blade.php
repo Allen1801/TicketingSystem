@@ -10,19 +10,15 @@
             <div class="card">
                 <div class="card-header">{{__('Department')}}</div>
                 <div class="card-body">
-                    <a href="javascript:void(0)" class="btn btn-primary" onclick="add()">Add Customer</a>
+                    <a href="javascript:void(0)" class="btn btn-primary" onclick="add()">Add Department</a>
 
-                    <br>
+                    <p></p>
 
                     <table class="table table-bordered" id="UserTable">
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Role</th>
                                 <th>Department</th>
-                                <th>Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -50,75 +46,13 @@
                 <form method="POST" action="javascript:void(0)" name="updateForm" id="updateForm" enctype="multipart/form-data">
                         @csrf
 
+                        <input type="hidden" name="id" id="id">
 
                         <div class="row mb-3 modal-lg">
-                            <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Name') }}</label>
+                            <label for="department" class="col-md-4 col-form-label text-md-end">{{ __('Department Name') }}</label>
 
                             <div class="col-md-6 .input-lg">
-                                <input id="name" type="text" class="form-control  @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
-
-                                @error('name')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
-
-                                @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <label for="role" class="col-md-4 col-form-label text-md-end">{{ __('Role') }}</label>
-
-                            <div class="col-md-6">
-                                <select class="form-select" name="role" id="role">
-                                    <option value="0">User</option>
-                                    <option value="1">Admin</option>
-                                </select>
-
-                                @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <label for="dept" class="col-md-4 col-form-label text-md-end">{{ __('Departement') }}</label>
-
-                            <div class="col-md-6">
-                                <select class="form-select" name="dept" id="dept">
-                                    <option value="HR">HR</option>
-                                    <option value="Finance">Finance</option>
-                                    <option value="MIS">MIS</option>
-                                </select>
-
-                                @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="row mb-3 modal-lg">
-                            <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label>
-
-                            <div class="col-md-6 .input-lg">
-                                <input id="password" type="password" class="form-control  @error('name') is-invalid @enderror" name="password" value="{{ old('password') }}" required autofocus>
+                                <input id="department" type="text" class="form-control  @error('name') is-invalid @enderror" name="department" required autocomplete="name" autofocus>
 
                                 @error('name')
                                     <span class="invalid-feedback" role="alert">
@@ -131,6 +65,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button type="submit" id="btn-save"class="btn btn-primary">Save changes</button>
+                </form>
             </div>
         </div>
     </div>
@@ -183,15 +118,11 @@ var channel = pusher.subscribe('my-channel');
                 processing: true,
                 serverSide: true,
                 //select: true,
-                columnDefs: [{ width: '15%', targets: 5 }],
-                ajax: '{!! url('/customer') !!}',
+                columnDefs: [{ width: '80%', targets: 1 }],
+                ajax: '{!! url('/department') !!}',
                 columns: [
                     { data: 'id', name: 'id' },
-                    { data: 'name', name: 'name' },
-                    { data: 'email', name: 'email' },
-                    { data: 'role', name: 'role' },
-                    { data: 'dept', name: 'dept' },
-                    { data: 'status', name: 'status' },
+                    { data: 'department', name: 'department' },
                     {data: 'action', name: 'action', orderable: false}
                     // Add other columns here
                 ],
@@ -207,7 +138,7 @@ var channel = pusher.subscribe('my-channel');
         var formData = new FormData(this);
         $.ajax({
             type: 'POST',
-            url: "{{url( '/insert' )}}",
+            url: "{{url( '/insertDept' )}}",
             data: formData,
             cache: false,
             contentType: false,
@@ -219,7 +150,7 @@ var channel = pusher.subscribe('my-channel');
                         icon: "success"
                     });
                 }
-                // $("#editModal").reset();
+                //$("#editModal").reset();
                 $("#editModal").modal('hide');
                 $("#btn-save").html('Submit');
                 $("#btn-save"). attr("disabled", false);
@@ -229,15 +160,32 @@ var channel = pusher.subscribe('my-channel');
         });
     });
 
+    function editFunc(id){
+     //$('#editModal').modal('show');
+    $.ajax({
+        type:"POST",
+        url: "{{ url('/editDept') }}",
+        data: { id: id },
+        dataType: 'json',
+        success: function(res){
+            $('#EditModal').html("Edit Employee");
+            $('#editModal').modal('show');
+            $('#id').val(res.id);
+            $('#department').val(res.department);
+            console.log(res);
+        }
+    });
+}
+
     function delFunc(id){
 
 $.ajax({
     type: "POST",
-    url: "{{ url('/remove') }}",
+    url: "{{ url('/Deptremove') }}",
     data: {id:id},
     dataType: 'json',
     success: function(response){
-        $('#DataTable').DataTable().ajax.reload();
+        $('#UserTable').DataTable().ajax.reload();
     },
 });
 }

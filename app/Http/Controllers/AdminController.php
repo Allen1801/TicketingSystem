@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CustomerModel;
 use App\Models\User;
+use App\Models\Departments;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
 use Yajra\DataTables\Facades\DataTables;
@@ -20,6 +21,35 @@ class AdminController extends Controller
     //     return view('dashboard');
 
     // }
+
+    public function insertDept(Request $request){
+
+        $ticket = [
+            'department' =>  $request->department,
+        ];
+
+        Departments::create($ticket);
+        return response()->json([
+            'status' => 200
+        ]);
+    }
+
+    public function editDept(Request $request)
+    {   
+        // $where = array('id' => $request->id);
+        // $employee  = CustomerModel::where($where)->first();
+        // return Response()->json($employee);
+
+        $id = $request->id;
+        $data = Departments::find($id);
+        return response()->json($data);
+    }
+
+    public function fetchDept()
+    {
+        $departments = Departments::all();
+        return response()->json($departments);
+    }
 
     public function insert(Request $request){
 
@@ -46,10 +76,18 @@ class AdminController extends Controller
         return response()->json(['success' => true]);
     }
 
+    public function Deptremove(Request $request){
+        $id = $request->id;
+        $record = Departments::findOrFail($id);
+        $record->delete();
+
+        return response()->json(['success' => true]);
+    }
+
     public function customer(){
 
         if(request()->ajax()){
-            return datatables()->of(User::select('*'))
+            return datatables()->of(User::where('role', 0))
             ->addColumn('action', 'action')
             ->rawColumns(['action'])
             ->addIndexColumn()
@@ -62,8 +100,8 @@ class AdminController extends Controller
     public function adminusers(){
 
         if(request()->ajax()){
-            return datatables()->of(User::select('*'))
-            ->addColumn('action', 'action')
+            return datatables()->of(User::where('role', 1))
+            ->addColumn('action', 'adminaction')
             ->rawColumns(['action'])
             ->addIndexColumn()
             ->make(true);
@@ -75,8 +113,8 @@ class AdminController extends Controller
     public function department(){
 
         if(request()->ajax()){
-            return datatables()->of(User::select('*'))
-            ->addColumn('action', 'action')
+            return datatables()->of(Departments::select('*'))
+            ->addColumn('action', 'adminaction')
             ->rawColumns(['action'])
             ->addIndexColumn()
             ->make(true);
@@ -194,6 +232,8 @@ class AdminController extends Controller
 
         return response()->json($data);
     }
+
+
 
     public function markasread(Request $request){
         $user = Auth::user();
