@@ -121,7 +121,7 @@
             </div>
         </nav>
 
-        @include('_sidebar')
+        @include('layouts._sidebar')
 
         <main class="py-4">
             @yield('content')

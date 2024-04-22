@@ -52,6 +52,7 @@ Route::post('/editDept', [AdminController::class,'editDept']);
 Route::post('/remove', [AdminController::class,'remove']);
 Route::post('/Deptremove', [AdminController::class,'Deptremove']);
 Route::post('/fetchDept', [AdminController::class,'fetchDept']);
+Route::post('/fetchAdmin', [AdminController::class,'fetchAdmin']);
 
 Route::get('/chart', [AdminController::class, 'chart']);
 Route::get('/line', [AdminController::class, 'line']);

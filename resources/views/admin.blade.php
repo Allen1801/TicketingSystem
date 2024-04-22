@@ -33,6 +33,12 @@
                         <option value="4">Very High</option>
                         
                     </select>
+
+                    <label for="filter-dropdown-handler">Priority:</label>
+                    <select id="filter-dropdown-handler">
+                        <option value="">All</option>
+                        
+                    </select>
                     
                     <table class="table table-bordered" id="DataTable">
                         <thead>
@@ -430,10 +436,29 @@ function delFunc(id){
 // }
 
 $(document).ready(function() {
+    // Fetch department choices from the server
+    $.ajax({
+        url: '{{url ('/fetchAdmin')}}',
+        type: 'POST',
+        dataType: 'json',
+        success: function(data) {
+            // Update dropdown with fetched data
+            var departmentDropdown = $('#filter-dropdown-handler');
+            $.each(data, function(index, handlers) {
+                departmentDropdown.append('<option value="' + handlers.name + '">' + handlers.name + '</option>');
+            });
+        },
+        error: function(xhr, status, error) {
+            console.error('Error fetching departments:', error);
+        }
+    });
+});
+
+$(document).ready(function() {
     // Apply the filter when the dropdown value changes
     $('#filter-dropdown').on('change', function() {
         var selectedValue = $(this).val();
-        $('#DataTable').DataTable().column(5).search(selectedValue).draw();
+        $('#DataTable').DataTable().column(6).search(selectedValue).draw();
         
     });
 });
@@ -441,7 +466,15 @@ $(document).ready(function() {
     // Apply the filter when the dropdown value changes
     $('#filter-dropdown-priority').on('change', function() {
         var selectedValue = $(this).val();
-        $('#DataTable').DataTable().column(6).search(selectedValue).draw();
+        $('#DataTable').DataTable().column(7).search(selectedValue).draw();
+        
+    });
+});
+$(document).ready(function() {
+    // Apply the filter when the dropdown value changes
+    $('#filter-dropdown-handler').on('change', function() {
+        var selectedValue = $(this).val();
+        $('#DataTable').DataTable().column(8).search(selectedValue).draw();
         
     });
 });

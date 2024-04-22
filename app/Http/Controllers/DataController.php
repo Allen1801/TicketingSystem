@@ -32,7 +32,7 @@ class DataController extends Controller
 
         if(request()->ajax()){
             return datatables()->of($post)
-            ->addColumn('action', 'action')
+            ->addColumn('action', 'layouts.action')
             ->rawColumns(['action'])
             ->addIndexColumn()
             ->make(true);
@@ -44,7 +44,7 @@ class DataController extends Controller
         if(request()->ajax()){
             $userid = auth()->user()->id;
             return datatables()->of(CustomerModel::select('*')->where('customer_id', $userid)->get())
-            ->addColumn('action', 'useraction')
+            ->addColumn('action', 'layouts.useraction')
             ->rawColumns(['action'])
             ->addIndexColumn()
             ->make(true);

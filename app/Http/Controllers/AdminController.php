@@ -51,6 +51,12 @@ class AdminController extends Controller
         return response()->json($departments);
     }
 
+    public function fetchAdmin()
+    {
+        $handlers = User::where('role', 1)->get();
+        return response()->json($handlers);
+    }
+
     public function insert(Request $request){
 
         $ticket = [
@@ -88,7 +94,7 @@ class AdminController extends Controller
 
         if(request()->ajax()){
             return datatables()->of(User::where('role', 0))
-            ->addColumn('action', 'action')
+            ->addColumn('action', 'layouts.action')
             ->rawColumns(['action'])
             ->addIndexColumn()
             ->make(true);
@@ -101,7 +107,7 @@ class AdminController extends Controller
 
         if(request()->ajax()){
             return datatables()->of(User::where('role', 1))
-            ->addColumn('action', 'adminaction')
+            ->addColumn('action', 'layouts.adminaction')
             ->rawColumns(['action'])
             ->addIndexColumn()
             ->make(true);
@@ -114,7 +120,7 @@ class AdminController extends Controller
 
         if(request()->ajax()){
             return datatables()->of(Departments::select('*'))
-            ->addColumn('action', 'adminaction')
+            ->addColumn('action', 'layouts.adminaction')
             ->rawColumns(['action'])
             ->addIndexColumn()
             ->make(true);
