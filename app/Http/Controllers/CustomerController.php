@@ -36,6 +36,16 @@ class CustomerController extends Controller
         ];
         $update = CustomerModel::where('id', $ticekt_id)->update($ticket);
 
+        // Get the email address of the user associated with the ticket
+        $findEmail = CustomerModel::find($ticket_id);
+        $userEmail = $findEmail->email;
+    
+        // Find the user based on the email address
+        $user = User::where('email', $userEmail)->first();
+    
+        // Send email notification to the user if the user exists
+        $user->notify(new EmailNotification($findEmail));
+ 
         return response()->json([
             'status' => 200,
             'data' => $update,
