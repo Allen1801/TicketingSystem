@@ -59,6 +59,32 @@ class AdminController extends Controller
 
     }
 
+    public function adminusers(){
+
+        if(request()->ajax()){
+            return datatables()->of(User::select('*'))
+            ->addColumn('action', 'action')
+            ->rawColumns(['action'])
+            ->addIndexColumn()
+            ->make(true);
+        }
+        return view('admin-users');
+
+    }
+
+    public function department(){
+
+        if(request()->ajax()){
+            return datatables()->of(User::select('*'))
+            ->addColumn('action', 'action')
+            ->rawColumns(['action'])
+            ->addIndexColumn()
+            ->make(true);
+        }
+        return view('department');
+
+    }
+
     public function main(){
         // Counting the records where 'column_name' equals the given value
         // $total = CustomerModel::count();

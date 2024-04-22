@@ -8,7 +8,7 @@
     <div class="row justify-content-center">
         <div class="col-md-10">
             <div class="card">
-                <div class="card-header">{{__('Customers')}}</div>
+                <div class="card-header">{{__('Department')}}</div>
                 <div class="card-body">
                     <a href="javascript:void(0)" class="btn btn-primary" onclick="add()">Add Customer</a>
 

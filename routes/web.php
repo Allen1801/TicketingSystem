@@ -43,6 +43,8 @@ Route::get('/datacustom', [DataController::class,'filter']);
 
 Route::get('/dashboard', [AdminController::class, 'records'])->name('dashboard');
 Route::get('/customer', [AdminController::class, 'customer'])->name('customer');
+Route::get('/admin-users', [AdminController::class, 'adminusers'])->name('admin-users');
+Route::get('/department', [AdminController::class, 'department'])->name('department');
 Route::get('/main', [AdminController::class, 'main'])->name('main');
 Route::post('/insert', [AdminController::class,'insert']);
 Route::post('/remove', [AdminController::class,'remove']);

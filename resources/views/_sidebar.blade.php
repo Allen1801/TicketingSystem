@@ -10,17 +10,24 @@
                     <i class="fs-5 bi-house"></i><span class="ms-1 d-none d-sm-inline">Home</span>
                 </a>
             </li>
-            <li>
+            <li class="nav-item">
                 <a href="{{ route('dashboard') }}"  class="nav-link text-truncate">
                     <i class="fs-5 bi-speedometer2"></i><span class="ms-1 d-none d-sm-inline">Dashboard</span> </a>
             </li>
-            <li>
+            <li class="nav-item">
                 <a href="{{ url('/datatables') }}" class="nav-link text-truncate">
                     <i class="fs-5 bi-table"></i><span class="ms-1 d-none d-sm-inline">Orders</span></a>
             </li>
-            <li>
-                <a href="{{ url('/customer') }}" class="nav-link text-truncate">
-                    <i class="fs-5 bi-people"></i><span class="ms-1 d-none d-sm-inline">Customers</span> </a>
+            <li class="nav-item dropdown">
+                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                <i class="bi bi-building"></i><span class="ms-1 d-none d-sm-inline">User and Departments</span>
+                </a>
+
+                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                    <a href="{{url('/customer')}}" class="dropdown-item"><i class="bi bi-people"></i>Customer</a>
+                    <a href="{{url('/admin-users')}}" class="dropdown-item"><i class="bi bi-person-check-fill"></i>Admin</a>
+                    <a href="{{url('/department')}}" class="dropdown-item"><i class="bi bi-buildings"></i>Departments</a>
+                </div>
             </li>
         </ul>
     </div>
