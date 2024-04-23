@@ -6,10 +6,30 @@ use Illuminate\Http\Request;
 use App\Models\CustomerModel;
 use App\Models\User;
 use App\Notifications\NewTicketNotification;
+use App\Notifications\EmailNotification;
+use Illuminate\Support\Facades\Notification;
 use Pusher\Pusher;
+use Illuminate\Support\Facades\Auth;    
 
 class CustomerController extends Controller
 {
+
+    public function usermain(){
+        // Counting the records where 'column_name' equals the given value
+        // $total = CustomerModel::count();
+        // $new = CustomerModel::where('status', 'New')->count();
+        // $inprogress = CustomerModel::where('status', 'Unresolved')->count();
+        // $complete = CustomerModel::where('status', 'Resolved')->count();
+        // $inactive = CustomerModel::where('status', 'Closed')->count();
+        // $open = CustomerModel::where('status', 'Open')->count();
+
+        // return view('index_admin', compact('total', 'new', 'inprogress','complete','inactive', 'open'));
+
+        $user = Auth::user();
+        $notifications = $user->unreadNotifications;
+
+        return view('index_user', ['notifications' => $notifications]);
+    }
 
     public function edit(Request $request)
     {   
@@ -37,7 +57,7 @@ class CustomerController extends Controller
         $update = CustomerModel::where('id', $ticekt_id)->update($ticket);
 
         // Get the email address of the user associated with the ticket
-        $findEmail = CustomerModel::find($ticket_id);
+        $findEmail = CustomerModel::find($ticekt_id);
         $userEmail = $findEmail->email;
     
         // Find the user based on the email address
@@ -45,10 +65,15 @@ class CustomerController extends Controller
     
         // Send email notification to the user if the user exists
         $user->notify(new EmailNotification($findEmail));
+        
  
         return response()->json([
             'status' => 200,
             'data' => $update,
+            'email' => $userEmail,
+            'user' => $user,
+            'findEmail' => $findEmail
+
         ]);
     }
     

@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
+<button class="btn float-start" data-bs-toggle="offcanvas" data-bs-target="#offcanvas2" role="button">
+    <i class="bi bi-arrow-right-square-fill fs-3" data-bs-toggle="offcanvas" data-bs-target="#offcanvas2"></i>
+</button>
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-10">

@@ -14,7 +14,7 @@ class EmailNotification extends Notification
     /**
      * Create a new notification instance.
      */
-    public function __construct()
+    public function __construct($findEmail)
     {
         $this->findEmail = $findEmail;
     }
@@ -26,7 +26,7 @@ class EmailNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return ['mail','database'];
     }
 
     /**
@@ -48,7 +48,8 @@ class EmailNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            //
+            'id' => $this->findEmail->id,
+            'message' => 'Your Ticket (ID: ' . $this->findEmail->id . ') has been ' . $this->findEmail->status . ' by ' . $this->findEmail->handler . '.',
         ];
     }
 }

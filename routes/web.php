@@ -16,6 +16,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('index');
+Route::get('/usermain', [CustomerController::class, 'usermain'])->name('main');
 
 Route::post('/store', [CustomerController::class,'store']);
 // Route::post('/store', [NotifController::class,'send']);

@@ -78,7 +78,7 @@
                 <form method="POST" action="" name="updateForm" id="updateForm" enctype="multipart/form-data">
                         @csrf
 
-                        <input type="hidden" name="id" id="id" >
+                        <input type="text" name="id" id="id" >
                         <input type="hidden" name="dataimage" id="dataimage" >
 
                         <div class="row mb-3 modal-lg">

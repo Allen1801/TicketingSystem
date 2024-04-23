@@ -33,8 +33,7 @@ class NewTicketNotification extends Notification
     {
         return [
             'id' => $this->insert->id,
-            'email' => $this->insert->email,
-            'message' => 'New Ticket Created',
+            'message' => 'New Ticket has been created under the email ' . $this->insert->email . '.',
 
         ];
     }
