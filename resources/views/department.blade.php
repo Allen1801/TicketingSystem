@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin_app')
 
 @section('content')
 <button class="btn float-start" data-bs-toggle="offcanvas" data-bs-target="#offcanvas" role="button">
