@@ -11,6 +11,7 @@ use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Notifications\Notification;  
+use App\Notifications\EmailNotification;
 use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
@@ -21,6 +22,75 @@ class AdminController extends Controller
     //     return view('dashboard');
 
     // }
+
+    public function accepttix(Request $request)
+    {   
+        $handler=Auth::user()->name;
+        $ticket_id = $request->id;
+        
+        $ticket = [
+
+            // 'prio' =>  $request->prio,
+            'handler' => $handler,
+            'status' => "Open",
+            //'remarks' => $request->remarks
+            
+        ];
+        $statuschange = CustomerModel::where('id', $ticket_id)->update($ticket);
+
+        // Get the email address of the user associated with the ticket
+        $findEmail = CustomerModel::find($ticket_id);
+        $userEmail = $findEmail->email;
+    
+        // // Find the user based on the email address
+        $user = User::where('email', $userEmail)->first();
+    
+        // // Send email notification to the user if the user exists
+        $user->notify(new EmailNotification($findEmail));
+        
+ 
+        return response()->json([
+            'status' => 200,
+            'data' => $statuschange,
+            'email' => $userEmail,
+            'user' => $user,
+            'findEmail' => $findEmail
+
+        ]);
+    }
+
+    public function statuschange(Request $request)
+    {   
+        $ticket_id = $request->id;
+        
+        $ticket = [
+
+            'status' => 'Resolved',
+            //'remarks' => $request->remarks
+            
+        ];
+        $statuschange = CustomerModel::where('id', $ticket_id)->update($ticket);
+
+        // Get the email address of the user associated with the ticket
+        $findEmail = CustomerModel::find($ticket_id);
+        $userEmail = $findEmail->email;
+    
+        // // Find the user based on the email address
+        $user = User::where('email', $userEmail)->first();
+    
+        // // Send email notification to the user if the user exists
+        $user->notify(new EmailNotification($findEmail));
+        
+ 
+        return response()->json([
+            'status' => 200,
+            'data' => $statuschange,
+            'email' => $userEmail,
+            'user' => $user,
+            'findEmail' => $findEmail
+
+        ]);
+    }
 
     public function insertDept(Request $request){
 
@@ -145,6 +215,8 @@ class AdminController extends Controller
 
         return view('index_admin', ['notifications' => $notifications]);
     }
+
+    // TODO:CHARTS AND ANALYTICS
 
     public function records(){
         // Counting the records where 'column_name' equals the given value

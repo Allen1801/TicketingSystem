@@ -78,7 +78,7 @@
                 <form method="POST" action="" name="updateForm" id="updateForm" enctype="multipart/form-data">
                         @csrf
 
-                        <input type="text" name="id" id="id" >
+                        <input type="hidden" name="id" id="id" >
                         <input type="hidden" name="dataimage" id="dataimage" >
 
                         <div class="row mb-3 modal-lg">
@@ -183,13 +183,24 @@
 
                             <div class="col-md-6">
                                 <select class="form-select" name="status" id="status">
-                                    <option value="Open">Open</option>
-                                    <option value="Resolved">Resolved</option>
                                     <option value="Unresolved">Unresolved</option>
                                     <option value="Closed">Closed</option>
                                 </select>
 
                                 @error('email')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="row mb-3 modal-lg">
+                            <label for="remarks" class="col-md-4 col-form-label text-md-end">{{ __('Note/Remarks') }}</label>
+
+                            <div class="col-md-6 .input-lg">
+                                <textarea name="remarks" id="remarks" cols="50" rows="5"></textarea>
+                                @error('name')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -224,12 +235,18 @@
 
                         <input type="hidden" name="id" id="idnote" >
 
-                        <div class="row mb-3 modal-lg">
-                            <label for="remarks" class="col-md-4 col-form-label text-md-end">{{ __('Note/Remarks') }}</label>
+                        <div class="row mb-3">
+                            <label for="handler" class="col-md-4 col-form-label text-md-end">{{ __('Handler') }}</label>
 
-                            <div class="col-md-6 .input-lg">
-                                <textarea name="remarks" id="remarks" cols="50" rows="5"></textarea>
-                                @error('name')
+                            <div class="col-md-6">
+                                <select class="form-select" name="handler" id="handler">
+                                    <option value="Admin 1">Admin 1</option>
+                                    <option value="Admin 2">Admin 2</option>
+                                    <option value="Admin 3">Admin 3</option>
+                                    <option value="None">None</option>
+                                </select>
+
+                                @error('email')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -313,7 +330,7 @@ $(document).ready( function () {
             });
         });
 
-    function noteFunc(id){
+    function transferFunc(id){
         $.ajax({
         type:"POST",
         url: "{{ url('/edit') }}",
@@ -323,7 +340,45 @@ $(document).ready( function () {
             $('#NoteModal').html("Edit Employee");
             $('#noteModal').modal('show');
             $('#idnote').val(res.id); 
-            $('#remarks').val(res.remarks);
+            $('#handler').val(res.handler);
+            console.log(res);
+        }
+    });
+}
+
+function markFunc(id){
+        $.ajax({
+        type:"POST",
+        url: "{{ url('/statuschange') }}",
+        data: { id: id },
+        dataType: 'json',
+        success: function(res){
+            if (res.status == 200){
+                    Swal.fire({
+                        title: "Ticket Successfully Resolved",
+                        icon: "success"
+                    });
+                }
+            $('#DataTable').DataTable().ajax.reload();
+            console.log(res);
+        }
+    });
+}
+
+function acceptFunc(id){
+        $.ajax({
+        type:"POST",
+        url: "{{ url('/accepttix') }}",
+        data: { id: id },
+        dataType: 'json',
+        success: function(res){
+            if (res.status == 200){
+                    Swal.fire({
+                        title: "Ticket Accepted",
+                        icon: "success"
+                    });
+                }
+            $('#DataTable').DataTable().ajax.reload();
             console.log(res);
         }
     });
@@ -399,7 +454,8 @@ $('#remarksForm').submit(function(e){
             $('#image').html(`<img src="{{asset('storage/uploads/')}}/${res.image}" class="img-fluid img-thumbnail" >`)
             $('#prio').val(res.prio); 
             $('#handler').val(res.handler);
-            // $('#status').val(res.status);
+            $('#status').val(res.status);
+            $('#remarks').val(res.remarks);
             $('#id').val(res.id);
             $('#dataimage').val(res.image)
             console.log(res);

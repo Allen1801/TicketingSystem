@@ -51,7 +51,7 @@ class CustomerController extends Controller
             'prio' =>  $request->prio,
             'handler' => $request->handler,
             'status' => $request->status,
-            //'remarks' => $request->remarks
+            'remarks' => $request->remarks
             
         ];
         $update = CustomerModel::where('id', $ticekt_id)->update($ticket);
@@ -116,22 +116,11 @@ class CustomerController extends Controller
         ]);
     }
 
-    // public function note(Request $request)
-    // {   
-    //     // $where = array('id' => $request->id);
-    //     // $employee  = CustomerModel::where($where)->first();
-    //     // return Response()->json($employee);
-
-    //     $id = $request->id;
-    //     $data = CustomerModel::find($id);
-    //     return response()->json($data);
-    // }
-
     public function updatenote(Request $request) {
         $ticket_id = $request->id;
         
         $ticketnote = [
-            'remarks' => $request->remarks
+            'handler' => $request->handler
         ];
         
         $updatenote = CustomerModel::where('id', $ticket_id)->update($ticketnote);

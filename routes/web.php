@@ -15,30 +15,22 @@ Route::get('/', function () {
 
 Auth::routes();
 
+// Customer Routes
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('index');
 Route::get('/usermain', [CustomerController::class, 'usermain'])->name('main');
-
 Route::post('/store', [CustomerController::class,'store']);
-// Route::post('/store', [NotifController::class,'send']);
-// Route::post('/store', function () {
-//     $message = "New Ticket Request";
-//     event(new SendNotification($message));
-// });
 Route::post('/update', [CustomerController::class,'update']);
-Route::post('/edit', [CustomerController::class, 'edit']);
-Route::post('/delete', [CustomerController::class, 'delete']);
-//Route::post('/note', [CustomerController::class, 'note']);
 Route::post('/updatenote', [CustomerController::class, 'updatenote']);
-
+//Route::post('/note', [CustomerController::class, 'note']);
 
 Route::get('/image/{id}', [CustomerController::class, 'showImg'])->name('image.show');
-//Route::get('action', [CustomerController::class,'index']);
 
+// Datatables Routes
 Route::post('/admin', [DataController::class, 'getRecords'])->name('adminData');
 Route::get('/datatables', [DataController::class, 'index'])->name('datatables');
-// Route::get('/datatables', [AdminController::class, 'records']);
 Route::get('/datacustom', [DataController::class,'filter']);
 
+// Admin Routes
 Route::get('/dashboard', [AdminController::class, 'records'])->name('dashboard');
 Route::get('/customer', [AdminController::class, 'customer'])->name('customer');
 Route::get('/admin-users', [AdminController::class, 'adminusers'])->name('admin-users');
@@ -52,13 +44,22 @@ Route::post('/Deptremove', [AdminController::class,'Deptremove']);
 Route::post('/fetchDept', [AdminController::class,'fetchDept']);
 Route::post('/fetchAdmin', [AdminController::class,'fetchAdmin']);
 
+// Action Buttons
+Route::post('/edit', [CustomerController::class, 'edit']);
+Route::post('/delete', [CustomerController::class, 'delete']);
+Route::post('/statuschange', [AdminController::class, 'statuschange']);
+Route::post('/accepttix', [AdminController::class, 'accepttix']);
+
+// Analytics for Dashboard
 Route::get('/chart', [AdminController::class, 'chart']);
 Route::get('/line', [AdminController::class, 'line']);
 Route::get('/bar', [AdminController::class, 'bar']);
 Route::get('/donut', [AdminController::class, 'donut']);
 
+// Notification
 Route::get('/markasread', [AdminController::class, 'markasread']);
 
+// Profile Updates
 Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
 Route::post('/profileUpdate', [ProfileController::class, 'update' ]);
 
