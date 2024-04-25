@@ -32,7 +32,7 @@
     </div>
 </div>
 
-<!-- Modal -->
+<!-- ADD Ticket Modal -->
 
 <div class="modal" id="editModal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
@@ -45,7 +45,7 @@
             </div>
             <div class="modal-body">
                 <!-- Your form for editing data goes here -->
-                <form method="POST" action="javascript:void(0)" name="updateForm" id="updateForm" enctype="multipart/form-data">
+                <form method="POST" action="javascript:void(0)" name="addForm" id="addForm" enctype="multipart/form-data">
                         @csrf
 
                         <input type="hidden" name="id" id="id" value="{{ Auth::user()->id }}">
@@ -109,6 +109,92 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button type="submit" id="btn-save"class="btn btn-primary">Save changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Review Modal -->
+
+<div class="modal" id="previewModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Data</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Your form for editing data goes here -->
+                <form method="POST" action="javascript:void(0)" name="updateForm" id="updateForm" enctype="multipart/form-data">
+                        @csrf
+
+                        <input type="hidden" name="id" id="id" value="{{ Auth::user()->id }}">
+
+                        <div class="row mb-3 modal-lg">
+                            <label for="subject" class="col-md-4 col-form-label text-md-end">{{ __('Subject') }}</label>
+
+                            <div class="col-md-6 .input-lg">
+                                <input id="previewsubject" type="text" class="form-control  @error('name') is-invalid @enderror" name="previewsubject" value="{{ old('subject') }}" required autocomplete="subject" autofocus>
+
+                                @error('name')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="previewemail" type="email" class="form-control @error('email') is-invalid @enderror" name="previewemail" value="{{ old('email') }}" required autocomplete="email">
+
+                                @error('email')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label for="description" class="col-md-4 col-form-label text-md-end">{{ __('Description') }}</label>
+
+                            <div class="col-md-6">
+                                <textarea class="form-control" name="previewdescription" id="previewdescription" rows="3"></textarea>
+
+                                @error('name')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label for="description" class="col-md-4 col-form-label text-md-end">{{ __('Upload Image') }}</label>
+
+                            <div class="col-md-6">
+                                <div class="image" id="previewimage">
+                                
+                                </div>
+                                <input type="file" id="image" name="previewimage">
+                                @error('name')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" id="btn-save"class="btn btn-primary">Save changes</button>
+                </form>
             </div>
         </div>
     </div>
@@ -148,7 +234,7 @@
         $('#editModal').modal('show');
     }
 
-    $('#updateForm').submit(function(e){
+    $('#addForm').submit(function(e){
         e.preventDefault();
         var formData = new FormData(this);
         $.ajax({
@@ -175,5 +261,58 @@
             }
         });
     });
+
+    function editFunc(id){
+     //$('#editModal').modal('show');
+    $.ajax({
+        type:"POST",
+        url: "{{ url('/edit') }}",
+        data: { id: id },
+        dataType: 'json',
+        success: function(res){
+            $('#EditModal').html("Edit Employee");
+            $('#previewModal').modal('show');
+            $('#previewsubject').val(res.subject);
+            $('#previewemail').val(res.email);           
+            $('#previewdescription').val(res.description);
+            $('#previewimage').html(`<img src="{{asset('storage/uploads/')}}/${res.image}" class="img-fluid img-thumbnail" >`)
+            // $('#prio').val(res.prio); 
+            // $('#handler').val(res.handler);
+            // $('#status').val(res.status);
+            // $('#remarks').val(res.remarks);
+            $('#id').val(res.id);
+            $('#dataimage').val(res.image)
+            console.log(res);
+        }
+    });
+}
+
+$('#updateForm').submit(function(e){
+        e.preventDefault();
+        var formData = new FormData(this);
+        $.ajax({
+            type: 'POST',
+            url: "{{url( '/userupdate' )}}",
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: (res) =>{
+                if (res.status == 200){
+                    Swal.fire({
+                        title: "Ticket Successfully Edited",
+                        icon: "success"
+                    });
+                }
+                $("#editModal").modal('hide');
+                $("#btn-save").html('Submit');
+                $("#btn-save"). attr("disabled", false);
+                $('#DataTable').DataTable().ajax.reload();
+                console.log(res);
+            },
+
+        });
+    });
+
 </script>
 @endsection

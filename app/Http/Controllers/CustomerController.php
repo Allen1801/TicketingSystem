@@ -42,16 +42,25 @@ class CustomerController extends Controller
         return response()->json($data);
     }
 
-    public function update(Request  $request) {
+    public function userupdate(Request  $request) {
 
         $ticekt_id = $request->id;
+
+        $file =  $request->file('previewimage');
+        $filename = time() . '.' . $file->getClientOriginalExtension();
+        $file->storeAs('public/uploads',$filename);
         
         $ticket = [
 
-            'prio' =>  $request->prio,
-            'handler' => $request->handler,
-            'status' => $request->status,
-            'remarks' => $request->remarks
+            // 'prio' =>  $request->prio,
+            // 'handler' => $request->handler,
+            // 'status' => $request->status,
+            // 'remarks' => $request->remarks
+            'subject' => $request->previewsubject,
+            'description' => $request->previewdescription,
+            'email' => $request->previewemail,
+            'image' => $filename,
+
             
         ];
         $update = CustomerModel::where('id', $ticekt_id)->update($ticket);
@@ -76,7 +85,7 @@ class CustomerController extends Controller
 
         ]);
     }
-    
+
     public function store(Request $request){
 
         $pusher = new Pusher('d2bb2b51e17bf488dfb1', 'eb95694f27dd6b02d92f', '1788049', [

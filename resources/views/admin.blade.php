@@ -34,7 +34,7 @@
                         
                     </select>
 
-                    <label for="filter-dropdown-handler">Priority:</label>
+                    <label for="filter-dropdown-handler">Handler:</label>
                     <select id="filter-dropdown-handler">
                         <option value="">All</option>
                         
@@ -48,7 +48,7 @@
                                 <th>Name</th>
                                 <th>Email</th>
                                 <th>Subject</th>
-                                <th>Description</th>
+                                <!-- <th>Description</th> -->
                                 <th>Status</th>
                                 <th>Priority Level</th>
                                 <th>Handler</th>
@@ -80,34 +80,6 @@
 
                         <input type="hidden" name="id" id="id" >
                         <input type="hidden" name="dataimage" id="dataimage" >
-
-                        <div class="row mb-3 modal-lg">
-                            <label for="subject" class="col-md-4 col-form-label text-md-end">{{ __('Subject') }}</label>
-
-                            <div class="col-md-6 .input-lg">
-                                <input id="subject" type="text" class="form-control  @error('name') is-invalid @enderror" name="subject" disabled  required autocomplete="subject" autofocus>
-
-                                @error('name')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email"  disabled required autocomplete="email">
-
-                                @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
 
                         <div class="row mb-3">
                             <label for="description" class="col-md-4 col-form-label text-md-end">{{ __('Description') }}</label>
@@ -160,29 +132,11 @@
                         </div>
 
                         <div class="row mb-3">
-                            <label for="handler" class="col-md-4 col-form-label text-md-end">{{ __('Handler') }}</label>
-
-                            <div class="col-md-6">
-                                <select class="form-select" name="handler" id="handler">
-                                    <option value="Admin 1">Admin 1</option>
-                                    <option value="Admin 2">Admin 2</option>
-                                    <option value="Admin 3">Admin 3</option>
-                                    <option value="None">None</option>
-                                </select>
-
-                                @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
                             <label for="status" class="col-md-4 col-form-label text-md-end">{{ __('Status') }}</label>
 
                             <div class="col-md-6">
                                 <select class="form-select" name="status" id="status">
+                                    <option value="Open">Open</option>
                                     <option value="Unresolved">Unresolved</option>
                                     <option value="Closed">Closed</option>
                                 </select>
@@ -239,11 +193,9 @@
                             <label for="handler" class="col-md-4 col-form-label text-md-end">{{ __('Handler') }}</label>
 
                             <div class="col-md-6">
-                                <select class="form-select" name="handler" id="handler">
-                                    <option value="Admin 1">Admin 1</option>
-                                    <option value="Admin 2">Admin 2</option>
-                                    <option value="Admin 3">Admin 3</option>
+                                <select class="form-select" name="handler" id="handler1">
                                     <option value="None">None</option>
+
                                 </select>
 
                                 @error('email')
@@ -311,8 +263,11 @@ $(document).ready( function () {
                 serverSide: true,
                 //select: true,
                 "order": [[0, 'desc']],
-                columnDefs: [{ width: '12%', targets: 9 },
-                            {width: '15%',targets: 2}],
+                columnDefs: [{ width: '12%', targets: 8 },
+                            {width: '10%',targets: 4},
+                            {width: '5%',targets: 0},
+                            {width: '5%',targets: 1},
+                            {width: '5%',targets: 6}],
                 ajax: '{!! url('/datatables') !!}',
                 columns: [
                     { data: 'id', name: 'id' },
@@ -320,7 +275,7 @@ $(document).ready( function () {
                     {data: 'user_name', name: 'user_name'},
                     { data: 'email', name: 'email' },
                     { data: 'subject', name: 'subject' },
-                    { data: 'description', name: 'description' },
+                    // { data: 'description', name: 'description' },
                     { data: 'status', name: 'status' },
                     { data: 'prio', name: 'prio'},
                     { data: 'handler', name: 'handler'},
@@ -340,7 +295,7 @@ $(document).ready( function () {
             $('#NoteModal').html("Edit Employee");
             $('#noteModal').modal('show');
             $('#idnote').val(res.id); 
-            $('#handler').val(res.handler);
+            $('#handler1').val(res.handler);
             console.log(res);
         }
     });
@@ -476,21 +431,6 @@ function delFunc(id){
     });
 }
 
-// function noteFunc(id){
-//     $.ajax({
-//         type:"POST",
-//         url: "{{ url('/edit') }}",
-//         data: { id: id },
-//         dataType: 'json',
-//         success: function(res){
-//             $('#EditModal').html("Edit Employee");
-//             $('#noteModal').modal('show');
-//             $('#id').val(res.id);
-//             $('#remarks').val(res.remarks);
-//         }
-//         });
-// }
-
 $(document).ready(function() {
     // Fetch department choices from the server
     $.ajax({
@@ -500,8 +440,10 @@ $(document).ready(function() {
         success: function(data) {
             // Update dropdown with fetched data
             var departmentDropdown = $('#filter-dropdown-handler');
+            var departmentDropdown2 = $('#handler1');
             $.each(data, function(index, handlers) {
                 departmentDropdown.append('<option value="' + handlers.name + '">' + handlers.name + '</option>');
+                departmentDropdown2.append('<option value="' + handlers.name + '">' + handlers.name + '</option>');
             });
         },
         error: function(xhr, status, error) {
