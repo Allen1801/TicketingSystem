@@ -44,8 +44,9 @@
                         <thead>
                             <tr>
                                 <th>Ticket No.</th>
-                                <th>Customer ID</th>
+                                <!-- <th>Customer ID</th> -->
                                 <th>Name</th>
+                                <th>Department</th>
                                 <th>Email</th>
                                 <th>Subject</th>
                                 <!-- <th>Description</th> -->
@@ -266,13 +267,14 @@ $(document).ready( function () {
                 columnDefs: [{ width: '12%', targets: 8 },
                             {width: '10%',targets: 4},
                             {width: '5%',targets: 0},
-                            {width: '5%',targets: 1},
+                            {width: '15%',targets: 1},
                             {width: '5%',targets: 6}],
                 ajax: '{!! url('/datatables') !!}',
                 columns: [
                     { data: 'id', name: 'id' },
-                    { data: 'customer_id', name: 'Customer_id' },
-                    {data: 'user_name', name: 'user_name'},
+                    // { data: 'customer_id', name: 'Customer_id' },
+                    {data: 'name', name: 'name'},
+                    {data: 'department', name: 'department'},
                     { data: 'email', name: 'email' },
                     { data: 'subject', name: 'subject' },
                     // { data: 'description', name: 'description' },

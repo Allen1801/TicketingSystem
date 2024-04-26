@@ -13,6 +13,8 @@ class CustomerModel extends Model
     protected $table = "tickets";
     protected $fillable = [
         'customer_id',
+        'name',
+        'department',
         'subject',
         'email',
         'description',
@@ -21,6 +23,6 @@ class CustomerModel extends Model
         'handler',
         'status',
         'remarks',
-        'created_at'
+        // 'created_at'
     ];
 }

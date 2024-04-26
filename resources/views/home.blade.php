@@ -93,6 +93,34 @@
                         </div>
 
                         <div class="row mb-3">
+                            <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Person to Look for') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="name" type="text" class="form-control @error('email') is-invalid @enderror" name="name" value="{{ old('email') }}" required autocomplete="email">
+
+                                @error('email')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label for="dept" class="col-md-4 col-form-label text-md-end">{{ __('Departement') }}</label>
+
+                            <div class="col-md-6">
+                            <select id="dept" name="dept" class="form-control"></select>
+
+                                @error('email')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
                             <label for="description" class="col-md-4 col-form-label text-md-end">{{ __('Upload Image') }}</label>
 
                             <div class="col-md-6">
@@ -313,6 +341,25 @@ $('#updateForm').submit(function(e){
 
         });
     });
+
+    $(document).ready(function() {
+    // Fetch department choices from the server
+    $.ajax({
+        url: '{{url ('/fetchDept')}}',
+        type: 'POST',
+        dataType: 'json',
+        success: function(data) {
+            // Update dropdown with fetched data
+            var departmentDropdown = $('#dept');
+            $.each(data, function(index, departments) {
+                departmentDropdown.append('<option value="' + departments.department + '">' + departments.department + '</option>');
+            });
+        },
+        error: function(xhr, status, error) {
+            console.error('Error fetching departments:', error);
+        }
+    });
+});
 
 </script>
 @endsection

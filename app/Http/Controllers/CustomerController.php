@@ -102,6 +102,8 @@ class CustomerController extends Controller
 
         $ticket = [
             'customer_id' => $request->id,
+            'name' => $request->name,
+            'department' => $request->dept,
             'subject' =>  $request->subject,
             'email' => $request->email,
             'description' => $request->description,
