@@ -172,7 +172,7 @@
     </div>
 </div>
 
-<!-- Modal -->
+<!-- Transfer Modal -->
 
 <div class="modal" id="noteModal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
@@ -210,6 +210,47 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button type="submit" id="btn-save1" class="btn btn-primary">Save changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Resolved Modal -->
+
+<div class="modal" id="solutionModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Data</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Your form for editing data goes here -->
+                <form method="POST" action="" name="solutionForm" id="solutionForm" enctype="multipart/form-data">
+                        @csrf
+
+                        <input type="hidden" name="id" id="idsolution" >
+
+                        <div class="row mb-3 modal-lg">
+                            <label for="solution" class="col-md-4 col-form-label text-md-end">{{ __('Solution') }}</label>
+
+                            <div class="col-md-6 .input-lg">
+                                <textarea name="solution" id="solution" cols="50" rows="5"></textarea>
+
+                                @error('name')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" id="btn-save2" class="btn btn-primary">Save changes</button>
                 </form>
             </div>
         </div>
@@ -306,17 +347,14 @@ $(document).ready( function () {
 function markFunc(id){
         $.ajax({
         type:"POST",
-        url: "{{ url('/statuschange') }}",
+        url: "{{ url('/edit') }}",
         data: { id: id },
         dataType: 'json',
         success: function(res){
-            if (res.status == 200){
-                    Swal.fire({
-                        title: "Ticket Successfully Resolved",
-                        icon: "success"
-                    });
-                }
-            $('#DataTable').DataTable().ajax.reload();
+            $('#NoteModal').html("Edit Employee");
+            $('#solutionModal').modal('show');
+            $('#idsolution').val(res.id); 
+            $('#solution').val(res.solution);
             console.log(res);
         }
     });
@@ -340,6 +378,33 @@ function acceptFunc(id){
         }
     });
 }
+
+$('#solutionForm').submit(function(e){
+        e.preventDefault();
+        var formData = new FormData(this);
+        $.ajax({
+            type: 'POST',
+            url: "{{url( '/statuschange' )}}",
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: (res) =>{
+                if (res.status == 200){
+                    Swal.fire({
+                        title: "Ticket Successfully Edited",
+                        icon: "success"
+                    });
+                }
+                $("#noteModal").modal('hide');
+                $("#btn-save2").html('Submit');
+                $("#btn-save2"). attr("disabled", false);
+                $('#DataTable').DataTable().ajax.reload();
+                console.log(res);
+            },
+
+        });
+    });
 
 $('#remarksForm').submit(function(e){
         e.preventDefault();

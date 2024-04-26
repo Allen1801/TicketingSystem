@@ -37,7 +37,8 @@ class EmailNotification extends Notification
         return (new MailMessage)
                     ->subject('Ticket Updated')
                     ->line('Your ticket (ID: ' . $this->findEmail->id . ') has been ' . $this->findEmail->status . ' by ' . $this->findEmail->handler . '.')
-                    ->line('Thank you for using our application!');
+                    ->line('Thank you for using our application!')
+                    ->line($this->findEmail->solution);
     }
 
     /**

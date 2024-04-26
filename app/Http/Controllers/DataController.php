@@ -19,9 +19,7 @@ class DataController extends Controller
 {
     public function index(){
 
-        $post = CustomerModel::select('tickets.*', "users.name as user_name")
-                                ->join('users', 'users.id', '=', 'tickets.customer_id')
-                                ->get();
+        $post = CustomerModel::select('*')->get();
 
 
         if(request()->ajax()){

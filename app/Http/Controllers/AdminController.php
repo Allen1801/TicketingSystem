@@ -59,6 +59,7 @@ class AdminController extends Controller
         $ticket = [
 
             'status' => 'Resolved',
+            'solution' => $request->solution,
             //'remarks' => $request->remarks
             
         ];
