@@ -6,11 +6,13 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\URL;
 
 class EmailNotification extends Notification
 {
     use Queueable;
     public $findEmail;
+
     /**
      * Create a new notification instance.
      */
@@ -34,11 +36,14 @@ class EmailNotification extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
+
+        $surveyLink = URL::to('/survey');
         return (new MailMessage)
                     ->subject('Ticket Updated')
                     ->line('Your ticket (ID: ' . $this->findEmail->id . ') has been ' . $this->findEmail->status . ' by ' . $this->findEmail->handler . '.')
                     ->line('Thank you for using our application!')
-                    ->line($this->findEmail->solution);
+                    ->line($this->findEmail->solution)
+                    ->action('Fill up the survey' , $surveyLink);
     }
 
     /**

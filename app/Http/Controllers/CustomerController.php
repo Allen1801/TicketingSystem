@@ -150,4 +150,8 @@ class CustomerController extends Controller
 
         return response()->json(['success' => true]);
     }
+
+    public function survey(){
+        return view('survey');
+    }
 }
