@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\CustomerModel;
+use App\Models\SurveyModel;
 use App\Models\User;
 use App\Notifications\NewTicketNotification;
 use App\Notifications\EmailNotification;
@@ -153,5 +154,28 @@ class CustomerController extends Controller
 
     public function survey(){
         return view('survey');
+    }
+
+    public function survey_store(Request $request){
+
+        $ticket = [
+            'q1' => $request->no1,
+            'q2' => $request->no2,
+            'q3' => $request->no3,
+            'q4' => $request->no4,
+            'q5' => $request->no5,
+            'q6' => $request->no6,
+            'q7' => $request->no7,
+            'q8' => $request->no8,
+            'q9' => $request->no9,
+            'q0' => $request->no0,
+        ];
+
+        SurveyModel::create($ticket);
+        
+        return response()->json([
+            'status' => 200,
+            'data' => $ticket,
+        ]);
     }
 }
