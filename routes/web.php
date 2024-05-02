@@ -42,6 +42,14 @@ Route::get('/chart', [DataController::class, 'chart']);
 Route::get('/line', [DataController::class, 'line']);
 Route::get('/bar', [DataController::class, 'bar']);
 Route::get('/donut', [DataController::class, 'donut']);
+Route::get('/survey1', [DataController::class, 'survey1']);
+Route::get('/survey2', [DataController::class, 'survey2']);
+Route::get('/survey3', [DataController::class, 'survey3']);
+Route::get('/survey4', [DataController::class, 'survey4']);
+Route::get('/survey5', [DataController::class, 'survey5']);
+Route::get('/survey6', [DataController::class, 'survey6']);
+Route::get('/survey7', [DataController::class, 'survey7']);
+Route::get('/survey8', [DataController::class, 'survey8']);
 
 
 // Admin Routes
