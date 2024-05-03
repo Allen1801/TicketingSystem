@@ -162,7 +162,7 @@
                             <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#surveychart9" type="button" role="tab" aria-controls="profile" aria-selected="false">Question 9</button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#surveychart8" type="button" role="tab" aria-controls="profile" aria-selected="false">Question 10</button>
+                            <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#surveychart0" type="button" role="tab" aria-controls="profile" aria-selected="false">Question 10</button>
                         </li>
                     </ul>
                 </div>
@@ -190,42 +190,33 @@
                         <div class="tab-pane fade" id="surveychart7" role="tabpanel" aria-labelledby="profile-tab">
                             <canvas id="survey-chart7" width="200" height="58"></canvas>
                         </div>
+                        <div class="tab-pane fade" id="surveychart8" role="tabpanel" aria-labelledby="profile-tab">
+                            <canvas id="survey-chart8" width="200" height="58"></canvas>
+                        </div>
                         <div class="tab-pane fade" id="surveychart9" role="tabpanel" aria-labelledby="profile-tab">
                             <!-- <canvas id="survey-chart8" width="200" height="58"></canvas> -->
                             <table id='suggestionTable'>
-                                <!-- <thead>
+                                <thead>
+                                    <tr>
+                                    <th>ID</th>
                                     <th>Name</th>
                                     <th>Suggestions</th>
                                     <th>Date</th>
-                                </thead> -->
-                                <tbody>
-                                    @foreach ($q9 as $suggestions)
-                                    <tr>
-                                        <td>{{$suggestions->name}}</td>
-                                        <td>{{$suggestions->q9}}</td>
-                                        <td>{{$suggestions->created_at}}</td>                                  
                                     </tr>
-                                    @endforeach
-                                </tbody>
+                                </thead>
                             </table>
                         </div>
-                        <div class="tab-pane fade" id="surveychart8" role="tabpanel" aria-labelledby="profile-tab">
+                        <div class="tab-pane fade" id="surveychart0" role="tabpanel" aria-labelledby="profile-tab">
                             <!-- <canvas id="survey-chart8" width="200" height="58"></canvas> -->
-                            <table>
+                            <table id='surveyTable'>
                                 <thead>
-                                    <th>Name</th>
-                                    <th>Suggestions</th>
-                                    <th>Date</th>
-                                </thead>
-                                <tbody>
-                                    @foreach ($q9 as $suggestions)
                                     <tr>
-                                        <td>{{$suggestions->name}}</td>
-                                        <td>{{$suggestions->q0}}</td>
-                                        <td>{{$suggestions->created_at}}</td>                                  
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Comment</th>
+                                    <th>Date</th>
                                     </tr>
-                                    @endforeach
-                                </tbody>
+                                </thead>
                             </table>
                         </div>
                     </div>
@@ -368,36 +359,36 @@ var channel = pusher.subscribe('my-channel');
             });
         });
 
-        $(document).ready(function() {
-            $.ajax({
-                url: '{{ url('/donut') }}',
-                method: 'GET',
-                success: function(data) {
-                    var ctx = document.getElementById('donut-chart').getContext('2d');
-                    var myPieChart = new Chart(ctx, {
-                        type: 'doughnut',
-                        data: {
-                            labels: data.labels,
-                            datasets: [{
-                                data: data.values,
-                                backgroundColor: [
-                                    'rgb(255, 99, 132)',
-                                    'rgb(54, 162, 235)',
-                                    'rgb(255, 205, 86)',
-                                    'rgb(75, 192, 192)',
-                                    'rgb(153, 102, 255)',
-                                    'rgb(255, 159, 64)'
-                                ],
-                                hoverOffset: 4
-                            }]
-                        },
-                        options: {
-                            // Additional options for the pie chart
-                        }
-                    });
-                }
-            });
-        });
+        // $(document).ready(function() {
+        //     $.ajax({
+        //         url: '{{ url('/donut') }}',
+        //         method: 'GET',
+        //         success: function(data) {
+        //             var ctx = document.getElementById('donut-chart').getContext('2d');
+        //             var myPieChart = new Chart(ctx, {
+        //                 type: 'doughnut',
+        //                 data: {
+        //                     labels: data.labels,
+        //                     datasets: [{
+        //                         data: data.values,
+        //                         backgroundColor: [
+        //                             'rgb(255, 99, 132)',
+        //                             'rgb(54, 162, 235)',
+        //                             'rgb(255, 205, 86)',
+        //                             'rgb(75, 192, 192)',
+        //                             'rgb(153, 102, 255)',
+        //                             'rgb(255, 159, 64)'
+        //                         ],
+        //                         hoverOffset: 4
+        //                     }]
+        //                 },
+        //                 options: {
+        //                     // Additional options for the pie chart
+        //                 }
+        //             });
+        //         }
+        //     });
+        // });
 
         $(document).ready(function() {
             $.ajax({
@@ -655,21 +646,62 @@ var channel = pusher.subscribe('my-channel');
             });
         });
 
-        $(document).ready(function(){
-    $('#suggestionTable').DataTable({
-        "searching": false,
-        "lengthChange": false,
-        "paging": false,
-        "info": false,
+$(document).ready( function () {
+    $.ajaxSetup({
+        headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+            $('#suggestionTable').DataTable({
+                processing: true,
+                serverSide: true,
+                "searching": false, // Remove the search bar
+                "lengthChange": false, // Remove the "Show entries" dropdown
+                "paging": false, // Remove pagination
+                "info": false, // Remove "Showing 1 of 1 entries"
+                "scrollY": "200px", // Adjust the height as needed
+                "ordering": false,
+                //select: true,
+                "order": [[0, 'desc']],
+                columnDefs: [{ width: '25%', targets: 1 },
+                //             {width: '10%',targets: 4},
+                //             {width: '5%',targets: 0},
+                //             {width: '15%',targets: 1},
+                             {width: '5%',targets: 3}],
+                ajax: '{!! url('/survey9') !!}',
+                columns: [
+                    { data: 'id', name: 'id' },
+                    {data: 'name', name: 'name'},
+                    {data: 'q9', name: 'q9'},
+                    { data: 'created_at', name: 'created_at' },
+                    // Add other columns here
+                ],
+            });
+
+        $('#surveyTable').DataTable({
+        processing: true,
+        serverSide: true,
+        "searching": false, // Remove the search bar
+        "lengthChange": false, // Remove the "Show entries" dropdown
+        "paging": false, // Remove pagination
+        "info": false, // Remove "Showing 1 of 1 entries"
+        "scrollY": "200px", // Adjust the height as needed
         "ordering": false,
-        "scrollY": "300px", // Adjust the height as needed
-        "columnDefs": [
-            { "width": "50%", "targets": 0 }, 
-            { "width": "30%", "targets": 1 }, 
-            { "width": "50%", "targets": 2 }
-            // Add more columns and widths as needed
+        order: [[0, 'desc']],
+        columnDefs: [
+            { width: '25%', targets: 1 },
+            { width: '5%', targets: 3 }
+        ],
+        ajax: '{!! url('/survey10') !!}',
+        columns: [
+            { data: 'id', name: 'id' },
+            { data: 'name', name: 'name' },
+            { data: 'q0', name: 'q0' },
+            { data: 'created_at', name: 'created_at' }
         ]
     });
 });
+
 </script>
 @endsection
