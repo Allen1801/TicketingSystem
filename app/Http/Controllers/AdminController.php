@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use Illuminate\Notifications\Notification;  
 use App\Notifications\EmailNotification;
 use Illuminate\Support\Facades\Auth;
+use PDF;
 
 class AdminController extends Controller
 {
@@ -51,6 +52,38 @@ class AdminController extends Controller
 
         ]);
     }
+
+    public function printtix(Request $request){
+        $ticket_id = $request->id;
+        $ticket = CustomerModel::find($ticket_id);
+
+        $data = [
+            'id' => $ticket->id,
+            // 'email' => $ticket->email,
+            'name' => $ticket->name,
+            'subject' => $ticket->subject,
+            'description' => $ticket->description,
+            'department' => $ticket->department,
+        ];
+
+        // Generate your PDF here using a library like DOMPDF or TCPDF
+        // Example using DOMPDF:
+        $pdf = PDF::loadView('layouts.pdf', $data);
+        
+        // Return the PDF as a response
+        return $pdf->download('ticket.pdf');
+
+
+
+        // $pdf = new Dompdf();
+        // $pdf->loadHtml('<h1>Hello, world!</h1>'); // Replace with your HTML content
+        // $pdf->setPaper('A4', 'portrait'); // Set paper size and orientation
+        // $pdf->render(); // Render the PDF
+
+        // // Return the PDF as a response
+        // return $pdf->stream('example.pdf');
+    }
+
 
     public function statuschange(Request $request)
     {   

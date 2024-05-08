@@ -66,6 +66,7 @@ Route::post('/editDept', [AdminController::class,'editDept']);
 Route::post('/Deptremove', [AdminController::class,'Deptremove']);
 Route::post('/statuschange', [AdminController::class, 'statuschange']);
 Route::post('/accepttix', [AdminController::class, 'accepttix']);
+Route::post('/printtix', [AdminController::class, 'printtix']);
 
 // Action Buttons
 

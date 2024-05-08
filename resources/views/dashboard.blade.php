@@ -96,41 +96,10 @@
     </div>
 </div>
 <br>
-<!-- <div class="container">
-    <div class="row justify-content-center">
-        TODO: BAR CHART
-        <div class="col-md-9">
-            <div class="card">
-                <div class="card-header"></div>
-                <div class="card-body">
-                <canvas id="bar-chart" width="200" height="58"></canvas>
-                </div>
-            </div>
-        </div>
-        TODO: DONUT CHART
-        <div class="col-md-3">
-            <div class="card">
-                <div class="card-header"></div>
-                <div class="card-body">
-                <canvas id="donut-chart" width="200" height="200"></canvas>
-                </div>
-            </div>
-        </div>
-    </div>
-</div> -->
 <div class="container">
     <div class="row justify-content-center">
-        <!-- TODO: DONUT CHART -->
-        <!-- <div class="col-md-3">
-            <div class="card">
-                <div class="card-header"></div>
-                <div class="card-body">
-                <canvas id="donut-chart" width="200" height="200"></canvas>
-                </div>
-            </div>
-        </div> -->
         <!-- TODO: SURVEY CHART -->
-        <div class="col-md-11">
+        <div class="col-md-9">
             <div class="card">
                 <div class="card-header">
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -158,62 +127,93 @@
                         <li class="nav-item" role="presentation">
                             <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#surveychart8" type="button" role="tab" aria-controls="profile" aria-selected="false">Question 8</button>
                         </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#surveychart9" type="button" role="tab" aria-controls="profile" aria-selected="false">Question 9</button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#surveychart0" type="button" role="tab" aria-controls="profile" aria-selected="false">Question 10</button>
-                        </li>
                     </ul>
                 </div>
                 <div class="card-body">
-                <!-- <canvas id="donut-chart" width="200" height="200"></canvas> -->
                     <div class="tab-content" id="myTabContent">
                         <div class="tab-pane fade show active" id="surveychart1" role="tabpanel" aria-labelledby="home-tab">
-                            <canvas id="survey-chart1" width="200" height="58"></canvas>
+                            <canvas id="survey-chart1" width="200" height="63"></canvas>
                         </div>
                         <div class="tab-pane fade" id="surveychart2" role="tabpanel" aria-labelledby="profile-tab">
-                            <canvas id="survey-chart2" width="200" height="58"></canvas>
+                            <canvas id="survey-chart2" width="200" height="63"></canvas>
                         </div>
                         <div class="tab-pane fade" id="surveychart3" role="tabpanel" aria-labelledby="profile-tab">
-                            <canvas id="survey-chart3" width="200" height="58"></canvas>
+                            <canvas id="survey-chart3" width="200" height="63"></canvas>
                         </div>
                         <div class="tab-pane fade" id="surveychart4" role="tabpanel" aria-labelledby="profile-tab">
-                            <canvas id="survey-chart4" width="200" height="58"></canvas>
+                            <canvas id="survey-chart4" width="200" height="63"></canvas>
                         </div>
                         <div class="tab-pane fade" id="surveychart5" role="tabpanel" aria-labelledby="profile-tab">
-                            <canvas id="survey-chart5" width="200" height="58"></canvas>
+                            <canvas id="survey-chart5" width="200" height="63"></canvas>
                         </div>
                         <div class="tab-pane fade" id="surveychart6" role="tabpanel" aria-labelledby="profile-tab">
-                            <canvas id="survey-chart6" width="200" height="58"></canvas>
+                            <canvas id="survey-chart6" width="200" height="63"></canvas>
                         </div>
                         <div class="tab-pane fade" id="surveychart7" role="tabpanel" aria-labelledby="profile-tab">
-                            <canvas id="survey-chart7" width="200" height="58"></canvas>
+                            <canvas id="survey-chart7" width="200" height="63"></canvas>
                         </div>
                         <div class="tab-pane fade" id="surveychart8" role="tabpanel" aria-labelledby="profile-tab">
-                            <canvas id="survey-chart8" width="200" height="58"></canvas>
+                            <canvas id="survey-chart8" width="200" height="63"></canvas>
                         </div>
-                        <div class="tab-pane fade" id="surveychart9" role="tabpanel" aria-labelledby="profile-tab">
-                            <!-- <canvas id="survey-chart8" width="200" height="58"></canvas> -->
-                            <table id='suggestionTable'>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- TODO: SURVEY COUNTER CHART -->
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-header">{{__("Total Survey Answered")}}</div>
+                <div class="card-body text-center">
+                    <a href="javascript:void(0)" class="btn btn-primary">{{ $survey }}</a>
+                </div>
+            </div>
+            <br>
+            <div class="card">
+                <div class="card-header">{{__("Total Postive Comments")}}</div>
+                <div class="card-body text-center">
+                    <a href="javascript:void(0)" class="btn btn-primary">{{ $survey }}</a>
+                </div>
+            </div>
+            <br>
+            <div class="card">
+                <div class="card-header">{{__("Total Negative Comments")}}</div>
+                <div class="card-body text-center">
+                    <a href="javascript:void(0)" class="btn btn-primary">{{ $survey }}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">{{__("COMMENTS")}}</div>
+                    <div class="card-body">
+                        <table id='surveyTable' class="table table-responsive">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Comment</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">{{__("SUGGESTIONS")}}</div>
+                        <div class="card-body">
+                            <table id='suggestionTable' class="table table-responsive">
                                 <thead>
                                     <tr>
                                     <th>ID</th>
                                     <th>Name</th>
                                     <th>Suggestions</th>
-                                    <th>Date</th>
-                                    </tr>
-                                </thead>
-                            </table>
-                        </div>
-                        <div class="tab-pane fade" id="surveychart0" role="tabpanel" aria-labelledby="profile-tab">
-                            <!-- <canvas id="survey-chart8" width="200" height="58"></canvas> -->
-                            <table id='surveyTable'>
-                                <thead>
-                                    <tr>
-                                    <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Comment</th>
                                     <th>Date</th>
                                     </tr>
                                 </thead>
@@ -225,6 +225,9 @@
         </div>
     </div>
 </div>
+
+@endsection
+@section('bottom-js')
 
 <script>
 
@@ -358,37 +361,6 @@ var channel = pusher.subscribe('my-channel');
                 }
             });
         });
-
-        // $(document).ready(function() {
-        //     $.ajax({
-        //         url: '{{ url('/donut') }}',
-        //         method: 'GET',
-        //         success: function(data) {
-        //             var ctx = document.getElementById('donut-chart').getContext('2d');
-        //             var myPieChart = new Chart(ctx, {
-        //                 type: 'doughnut',
-        //                 data: {
-        //                     labels: data.labels,
-        //                     datasets: [{
-        //                         data: data.values,
-        //                         backgroundColor: [
-        //                             'rgb(255, 99, 132)',
-        //                             'rgb(54, 162, 235)',
-        //                             'rgb(255, 205, 86)',
-        //                             'rgb(75, 192, 192)',
-        //                             'rgb(153, 102, 255)',
-        //                             'rgb(255, 159, 64)'
-        //                         ],
-        //                         hoverOffset: 4
-        //                     }]
-        //                 },
-        //                 options: {
-        //                     // Additional options for the pie chart
-        //                 }
-        //             });
-        //         }
-        //     });
-        // });
 
         $(document).ready(function() {
             $.ajax({
@@ -664,11 +636,19 @@ $(document).ready( function () {
                 "ordering": false,
                 //select: true,
                 "order": [[0, 'desc']],
-                columnDefs: [{ width: '25%', targets: 1 },
-                //             {width: '10%',targets: 4},
-                //             {width: '5%',targets: 0},
-                //             {width: '15%',targets: 1},
-                             {width: '5%',targets: 3}],
+                columnDefs: [
+                    { width: '25%', targets: 1 },
+                    {width: '5%',targets: 0},
+                    {width: '5%',targets: 3},
+                    {
+                        targets: [3], // Assuming the timestamp is in the first column
+                        render: function(data, type, row) {
+                        // Convert timestamp to normal date format
+                        var date = new Date(data);
+                        return date.toLocaleDateString(); // Change this according to your desired date format
+                        }
+                    }
+                ],
                 ajax: '{!! url('/survey9') !!}',
                 columns: [
                     { data: 'id', name: 'id' },
@@ -691,7 +671,16 @@ $(document).ready( function () {
         order: [[0, 'desc']],
         columnDefs: [
             { width: '25%', targets: 1 },
-            { width: '5%', targets: 3 }
+            { width: '5%', targets: 3 },
+            {width: '5%',targets: 0},
+            {
+                targets: [3], // Assuming the timestamp is in the first column
+                render: function(data, type, row) {
+                    // Convert timestamp to normal date format
+                    var date = new Date(data);
+                    return date.toLocaleDateString(); // Change this according to your desired date format
+                }
+            }
         ],
         ajax: '{!! url('/survey10') !!}',
         columns: [

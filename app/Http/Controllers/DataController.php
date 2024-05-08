@@ -106,9 +106,9 @@ class DataController extends Controller
         $complete = CustomerModel::where('status', 'Resolved')->count();
         $inactive = CustomerModel::where('status', 'Closed')->count();
         $open = CustomerModel::where('status', 'Open')->count();
+        $survey =  SurveyModel::count();
 
-
-        return view('dashboard', compact('total', 'new', 'inprogress','complete','inactive', 'open'));
+        return view('dashboard', compact('total', 'new', 'inprogress','complete','inactive', 'open', 'survey'));
         
     }
 
@@ -319,20 +319,14 @@ class DataController extends Controller
                     ->select('survey.*', 'users.*')
                     ->get();
 
-                    return response()->json([
-                        'data' => $data,
-            
-                    ]);
+                    return datatables()->of($data)->toJson();
     }
     public function survey10(){
         $data = SurveyModel::join('users', 'users.id', '=', 'survey.customer_id')
                     ->select('survey.*', 'users.*')
                     ->get();
 
-                    return response()->json([
-                        'data' => $data,
-            
-                    ]);
+                    return datatables()->of($data)->toJson();
     }
 }
 

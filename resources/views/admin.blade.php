@@ -256,7 +256,8 @@
         </div>
     </div>
 </div>
-
+@endsection
+@section('bottom-js')
 <script type="text/javascript">
 
 TODO://NOTIFICATION
@@ -375,6 +376,43 @@ function acceptFunc(id){
                 }
             $('#DataTable').DataTable().ajax.reload();
             console.log(res);
+        }
+    });
+}
+
+function printFunc(id){
+        $.ajax({
+        type:"POST",
+        url: "{{ url('/printtix') }}",
+        data: { id: id },
+        // dataType: 'json',
+        xhrFields: {
+            responseType: 'blob' // Set the response type to blob
+        },
+        success: function(response) {
+            // Create a Blob from the response
+            var blob = new Blob([response], { type: 'application/pdf' });
+
+            // Create a URL for the Blob
+            var url = window.URL.createObjectURL(blob);
+
+            // Create a link element to trigger the download
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = 'ticket.pdf'; // Set the filename
+            a.style.display = 'none';
+
+            // Append the link to the document body and trigger the download
+            document.body.appendChild(a);
+            a.click();
+
+            // Clean up
+            window.URL.revokeObjectURL(url);
+            $(a).remove();
+        },  
+        error: function(xhr, status, error) {
+            console.error(xhr.responseText);
+            // Handle any errors
         }
     });
 }
