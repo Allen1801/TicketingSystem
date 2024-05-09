@@ -27,7 +27,8 @@
     </div>
 </div>
 <br>
-
+@endsection
+@section('bottom-js')
 <script>
 
 TODO://NOTIFICATION

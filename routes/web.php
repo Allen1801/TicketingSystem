@@ -52,6 +52,7 @@ Route::get('/survey7', [DataController::class, 'survey7']);
 Route::get('/survey8', [DataController::class, 'survey8']);
 Route::get('/survey9', [DataController::class, 'survey9']);
 Route::get('/survey10', [DataController::class, 'survey10']);
+Route::get('/train-sentiment-model', [DataController::class, 'trainModel']);
 
 
 

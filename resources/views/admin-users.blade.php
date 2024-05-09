@@ -130,7 +130,8 @@
         </div>
     </div>
 </div>
-
+@endsection
+@section('bottom-js')
 <script type="text/javascript">
 
 TODO://NOTIFICATION

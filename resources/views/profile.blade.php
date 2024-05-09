@@ -73,7 +73,8 @@
         </div>
     </div>
 </div>
-
+@endsection
+@section('bottom-js')
 <script >
     $('#updateForm').submit(function(e){
         e.preventDefault();

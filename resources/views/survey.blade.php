@@ -110,7 +110,8 @@
         </div>
     </div>
 </div>
-
+@endsection
+@section('bottom-js')
 <script>
 $(document).ready( function () {
     $.ajaxSetup({

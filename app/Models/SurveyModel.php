@@ -12,6 +12,7 @@ class SurveyModel extends Model
     
     protected $table = 'survey';
     protected $fillable = [
+        'customer_id',
         'q1',
         'q2',
         'q3',
@@ -22,6 +23,7 @@ class SurveyModel extends Model
         'q8',
         'q9',
         'q0',
+        'sentiment'
         // 'created_at'
     ];
 }

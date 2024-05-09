@@ -14,6 +14,8 @@ use Carbon\Carbon;
 use Illuminate\Notifications\Notification;  
 use App\Notifications\EmailNotification;
 use Illuminate\Support\Facades\Auth;
+use Sentiment\Analyzer;
+use Sentiment\Tokenizer\WhitespaceTokenizer;
 
 
 class DataController extends Controller
@@ -107,8 +109,10 @@ class DataController extends Controller
         $inactive = CustomerModel::where('status', 'Closed')->count();
         $open = CustomerModel::where('status', 'Open')->count();
         $survey =  SurveyModel::count();
+        $positive = SurveyModel::where('sentiment', 'positive')->count();
+        $negative = SurveyModel::where('sentiment', 'negative')->count();
 
-        return view('dashboard', compact('total', 'new', 'inprogress','complete','inactive', 'open', 'survey'));
+        return view('dashboard', compact('total', 'new', 'inprogress','complete','inactive', 'open', 'survey', 'positive', 'negative'));
         
     }
 

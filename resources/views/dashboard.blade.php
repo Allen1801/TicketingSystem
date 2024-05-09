@@ -171,14 +171,14 @@
             <div class="card">
                 <div class="card-header">{{__("Total Postive Comments")}}</div>
                 <div class="card-body text-center">
-                    <a href="javascript:void(0)" class="btn btn-primary">{{ $survey }}</a>
+                    <a href="javascript:void(0)" class="btn btn-primary">{{ $positive }}</a>
                 </div>
             </div>
             <br>
             <div class="card">
                 <div class="card-header">{{__("Total Negative Comments")}}</div>
                 <div class="card-body text-center">
-                    <a href="javascript:void(0)" class="btn btn-primary">{{ $survey }}</a>
+                    <a href="javascript:void(0)" class="btn btn-primary">{{ $negative }}</a>
                 </div>
             </div>
         </div>
