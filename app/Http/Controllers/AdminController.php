@@ -54,12 +54,12 @@ class AdminController extends Controller
     }
 
     public function printtix(Request $request){
-        $ticket_id = $request->id;
+        $ticket_id = $request->id; 
         $ticket = CustomerModel::find($ticket_id);
 
         $data = [
             'id' => $ticket->id,
-            // 'email' => $ticket->email,
+            'email' => $ticket->email,
             'name' => $ticket->name,
             'subject' => $ticket->subject,
             'description' => $ticket->description,
