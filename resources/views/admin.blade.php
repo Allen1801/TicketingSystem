@@ -561,7 +561,7 @@ $(document).ready(function() {
     // Apply the filter when the dropdown value changes
     $('#filter-dropdown').on('change', function() {
         var selectedValue = $(this).val();
-        $('#DataTable').DataTable().column(6).search(selectedValue).draw();
+        $('#DataTable').DataTable().column(5).search(selectedValue).draw();
         
     });
 });
@@ -569,7 +569,7 @@ $(document).ready(function() {
     // Apply the filter when the dropdown value changes
     $('#filter-dropdown-priority').on('change', function() {
         var selectedValue = $(this).val();
-        $('#DataTable').DataTable().column(7).search(selectedValue).draw();
+        $('#DataTable').DataTable().column(6).search(selectedValue).draw();
         
     });
 });
@@ -577,7 +577,7 @@ $(document).ready(function() {
     // Apply the filter when the dropdown value changes
     $('#filter-dropdown-handler').on('change', function() {
         var selectedValue = $(this).val();
-        $('#DataTable').DataTable().column(8).search(selectedValue).draw();
+        $('#DataTable').DataTable().column(7).search(selectedValue).draw();
         
     });
 });
