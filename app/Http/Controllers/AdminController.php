@@ -36,10 +36,10 @@ class AdminController extends Controller
         $findEmail = CustomerModel::find($ticket_id);
         $userEmail = $findEmail->email;
     
-        // // Find the user based on the email address
-        $user = User::where('email', $userEmail)->first();
+        // // // Find the user based on the email address
+        $user = CustomerModel::where('email', $userEmail)->first();
     
-        // // Send email notification to the user if the user exists
+        // // // Send email notification to the user if the user exists
         $user->notify(new EmailNotification($findEmail));
         
  
@@ -103,7 +103,7 @@ class AdminController extends Controller
         $userEmail = $findEmail->email;
     
         // // Find the user based on the email address
-        $user = User::where('email', $userEmail)->first();
+        $user = CustomerModel::where('email', $userEmail)->first();
     
         // // Send email notification to the user if the user exists
         $user->notify(new EmailNotification($findEmail));
@@ -174,7 +174,7 @@ class AdminController extends Controller
         $userEmail = $findEmail->email;
     
         // Find the user based on the email address
-        $user = User::where('email', $userEmail)->first();
+        $user = CustomerModel::where('email', $userEmail)->first();
     
         // Send email notification to the user if the user exists
         $user->notify(new EmailNotification($findEmail));

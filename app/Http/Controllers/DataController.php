@@ -63,7 +63,7 @@ class DataController extends Controller
 
         if(request()->ajax()){
             return datatables()->of(User::where('role', 0))
-            ->addColumn('action', 'layouts.action')
+            ->addColumn('action', 'layouts.adminaction')
             ->rawColumns(['action'])
             ->addIndexColumn()
             ->make(true);
