@@ -11,10 +11,6 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('dashboard') }}"  class="nav-link text-truncate">
-                    <i class="fs-5 bi-speedometer2"></i><span class="ms-1 d-none d-sm-inline">Dashboard</span> </a>
-            </li>
-            <li class="nav-item">
                 <a href="{{ url('/home') }}" class="nav-link text-truncate">
                     <i class="fs-5 bi-table"></i><span class="ms-1 d-none d-sm-inline">Ticket Requests</span></a>
             </li>
