@@ -64,10 +64,14 @@ Route::post('/update', [AdminController::class,'update']);
 Route::post('/remove', [AdminController::class,'remove']);
 Route::post('/insertDept', [AdminController::class,'insertDept']);
 Route::post('/editDept', [AdminController::class,'editDept']);
+Route::post('/updateDept', [AdminController::class,'updateDept']);
 Route::post('/Deptremove', [AdminController::class,'Deptremove']);
 Route::post('/statuschange', [AdminController::class, 'statuschange']);
 Route::post('/accepttix', [AdminController::class, 'accepttix']);
 Route::post('/printtix', [AdminController::class, 'printtix']);
+Route::post('/admin_edit', [AdminController::class, 'admin_edit']);
+Route::post('/admin_update', [AdminController::class, 'admin_update']);
+Route::post('/reset', [AdminController::class, 'reset']);
 
 // Action Buttons
 

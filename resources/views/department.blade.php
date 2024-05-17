@@ -32,7 +32,7 @@
 
 <!-- Modal -->
 
-<div class="modal" id="editModal" tabindex="-1" role="dialog">
+<div class="modal" id="addModal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -43,7 +43,7 @@
             </div>
             <div class="modal-body">
                 <!-- Your form for editing data goes here -->
-                <form method="POST" action="javascript:void(0)" name="updateForm" id="updateForm" enctype="multipart/form-data">
+                <form method="POST" action="javascript:void(0)" name="addForm" id="addForm" enctype="multipart/form-data">
                         @csrf
 
                         <input type="hidden" name="id" id="id">
@@ -65,6 +65,45 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button type="submit" id="btn-save"class="btn btn-primary">Save changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="editModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Data</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Your form for editing data goes here -->
+                <form method="POST" action="javascript:void(0)" name="updateForm" id="updateForm" enctype="multipart/form-data">
+                        @csrf
+
+                        <input type="hidden" name="editid" id="editid">
+
+                        <div class="row mb-3 modal-lg">
+                            <label for="department" class="col-md-4 col-form-label text-md-end">{{ __('Department Name') }}</label>
+
+                            <div class="col-md-6 .input-lg">
+                                <input id="editdepartment" type="text" class="form-control  @error('name') is-invalid @enderror" name="editdepartment" required autocomplete="name" autofocus>
+
+                                @error('name')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" id="editbtn-save"class="btn btn-primary">Save changes</button>
                 </form>
             </div>
         </div>
@@ -131,10 +170,10 @@ var channel = pusher.subscribe('my-channel');
         });
 
         function add(){
-        $('#editModal').modal('show');
+        $('#addModal').modal('show');
     }
 
-    $('#updateForm').submit(function(e){
+    $('#addForm').submit(function(e){
         e.preventDefault();
         var formData = new FormData(this);
         $.ajax({
@@ -147,7 +186,34 @@ var channel = pusher.subscribe('my-channel');
             success: function(res){
                 if (res.status == 200){
                     Swal.fire({
-                        title: "Customer Added Successfully",
+                        title: "Department Added Successfully",
+                        icon: "success"
+                    });
+                }
+                //$("#editModal").reset();
+                $("#editModal").modal('hide');
+                $("#btn-save").html('Submit');
+                $("#btn-save"). attr("disabled", false);
+                $('#UserTable').DataTable().ajax.reload();
+                console.log(res.status);
+            }
+        });
+    });
+
+    $('#updateForm').submit(function(e){
+        e.preventDefault();
+        var formData = new FormData(this);
+        $.ajax({
+            type: 'POST',
+            url: "{{url( '/updateDept' )}}",
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function(res){
+                if (res.status == 201){
+                    Swal.fire({
+                        title: "Department Updated Successfully",
                         icon: "success"
                     });
                 }
@@ -171,8 +237,8 @@ var channel = pusher.subscribe('my-channel');
         success: function(res){
             $('#EditModal').html("Edit Employee");
             $('#editModal').modal('show');
-            $('#id').val(res.id);
-            $('#department').val(res.department);
+            $('#editid').val(res.id);
+            $('#editdepartment').val(res.department);
             console.log(res);
         }
     });
@@ -185,7 +251,13 @@ $.ajax({
     url: "{{ url('/Deptremove') }}",
     data: {id:id},
     dataType: 'json',
-    success: function(response){
+    success: function(res){
+        if (res.status == 201){
+                    Swal.fire({
+                        title: "Department Removed Successfully",
+                        icon: "success"
+                    });
+                }
         $('#UserTable').DataTable().ajax.reload();
     },
 });

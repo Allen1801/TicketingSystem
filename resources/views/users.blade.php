@@ -198,38 +198,6 @@ var channel = pusher.subscribe('my-channel');
                 ],
             });
         });
-
-        function add(){
-        $('#editModal').modal('show');
-    }
-
-    $('#updateForm').submit(function(e){
-        e.preventDefault();
-        var formData = new FormData(this);
-        $.ajax({
-            type: 'POST',
-            url: "{{url( '/insert' )}}",
-            data: formData,
-            cache: false,
-            contentType: false,
-            processData: false,
-            success: function(res){
-                if (res.status == 200){
-                    Swal.fire({
-                        title: "Customer Added Successfully",
-                        icon: "success"
-                    });
-                }
-                // $("#editModal").reset();
-                $("#editModal").modal('hide');
-                $("#btn-save").html('Submit');
-                $("#btn-save"). attr("disabled", false);
-                $('#UserTable').DataTable().ajax.reload();
-                console.log(res.status);
-            }
-        });
-    });
-
     function delFunc(id){
 
 $.ajax({
@@ -237,9 +205,35 @@ $.ajax({
     url: "{{ url('/remove') }}",
     data: {id:id},
     dataType: 'json',
-    success: function(response){
-        $('#DataTable').DataTable().ajax.reload();
-    },
+    success: function(res){
+                if (res.status == 201){
+                    Swal.fire({
+                        title: "Account Deleted Successfully",
+                        icon: "success"
+                    });
+                }
+                $('#UserTable').DataTable().ajax.reload();
+                console.log(res);
+            }
+});
+}
+function editFunc(id){
+
+$.ajax({
+    type: "POST",
+    url: "{{ url('/reset') }}",
+    data: {id:id},
+    dataType: 'json',
+    success: function(res){
+                if (res.status == 202){
+                    Swal.fire({
+                        title: "Password Reset Successfully",
+                        icon: "success"
+                    });
+                }
+                console.log(res);
+            }
+            
 });
 }
 </script>

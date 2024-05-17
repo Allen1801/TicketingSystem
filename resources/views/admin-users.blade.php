@@ -36,7 +36,7 @@
 
 <!-- Modal -->
 
-<div class="modal" id="editModal" tabindex="-1" role="dialog">
+<div class="modal" id="addModal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -47,9 +47,10 @@
             </div>
             <div class="modal-body">
                 <!-- Your form for editing data goes here -->
-                <form method="POST" action="javascript:void(0)" name="updateForm" id="updateForm" enctype="multipart/form-data">
+                <form method="POST" action="javascript:void(0)" name="addForm" id="addForm" enctype="multipart/form-data">
                         @csrf
 
+                        <input type="hidden" name="id" id="id" >
 
                         <div class="row mb-3 modal-lg">
                             <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Name') }}</label>
@@ -126,6 +127,104 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button type="submit" id="btn-save"class="btn btn-primary">Save changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="editModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Data</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Your form for editing data goes here -->
+                <form method="POST" action="javascript:void(0)" name="updateForm" id="updateForm" enctype="multipart/form-data">
+                        @csrf
+
+                        <input type="hidden" name="editid" id="editid" >
+
+                        <div class="row mb-3 modal-lg">
+                            <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Name') }}</label>
+
+                            <div class="col-md-6 .input-lg">
+                                <input id="editname" type="text" class="form-control  @error('name') is-invalid @enderror" name="editname" value="{{ old('name') }}" required autocomplete="name" autofocus>
+
+                                @error('name')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="editemail" type="email" class="form-control @error('email') is-invalid @enderror" name="editemail" value="{{ old('email') }}" required autocomplete="email">
+
+                                @error('email')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label for="role" class="col-md-4 col-form-label text-md-end">{{ __('Role') }}</label>
+
+                            <div class="col-md-6">
+                                <select class="form-select" name="editrole" id="editrole">
+                                    <option value="1">Admin</option>
+                                </select>
+
+                                @error('email')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label for="dept" class="col-md-4 col-form-label text-md-end">{{ __('Departement') }}</label>
+
+                            <div class="col-md-6">
+                            <select id="editdept" name="editdept" class="form-control"></select>
+
+                                @error('email')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="row mb-3 modal-lg">
+                            <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label>
+
+                            <div class="col-md-6 .input-lg">
+                                <input id="editpassword" type="password" class="form-control  @error('name') is-invalid @enderror" name="editpassword" value="{{ old('password') }}" autofocus>
+
+                                @error('name')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" id="editbtn-save"class="btn btn-primary">Save changes</button>
+                    </form>
             </div>
         </div>
     </div>
@@ -195,10 +294,10 @@ var channel = pusher.subscribe('my-channel');
         });
 
         function add(){
-        $('#editModal').modal('show');
+        $('#addModal').modal('show');
     }
 
-    $('#updateForm').submit(function(e){
+    $('#addForm').submit(function(e){
         e.preventDefault();
         var formData = new FormData(this);
         $.ajax({
@@ -211,30 +310,84 @@ var channel = pusher.subscribe('my-channel');
             success: function(res){
                 if (res.status == 200){
                     Swal.fire({
-                        title: "Customer Added Successfully",
+                        title: "Admin Added Successfully",
+                        icon: "success"
+                    });
+                }
+                // $("#editModal").reset();
+                $("#addModal").modal('hide');
+                document.getElementById('addForm').reset();
+                $("#btn-save").html('Submit');
+                $("#btn-save"). attr("disabled", false);
+                $('#UserTable').DataTable().ajax.reload();
+                console.log(res);
+            }
+        });
+    });
+
+    $('#updateForm').submit(function(e){
+        e.preventDefault();
+        var formData = new FormData(this);
+        $.ajax({
+            type: 'POST',
+            url: "{{url( '/admin_update' )}}",
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function(res){
+                if (res.status == 202){
+                    Swal.fire({
+                        title: "Admin Updated Successfully",
                         icon: "success"
                     });
                 }
                 // $("#editModal").reset();
                 $("#editModal").modal('hide');
-                $("#btn-save").html('Submit');
-                $("#btn-save"). attr("disabled", false);
+                document.getElementById('updateForm').reset();
+                $("#editbtn-save").html('Submit');
+                $("#editbtn-save"). attr("disabled", false);
                 $('#UserTable').DataTable().ajax.reload();
-                console.log(res.status);
+                console.log(res);
             }
         });
     });
 
-    function delFunc(id){
+    function editFunc(id){
+     //$('#editModal').modal('show');
+    $.ajax({
+        type:"POST",
+        url: '{{ url('/admin_edit') }}',
+        data: { id: id },
+        dataType: 'json',
+        success: function(res){
+            $('#EditModal').html("Edit Employee");
+            $('#editModal').modal('show');
+            $('#editid').val(res.id);
+            $('#editname').val(res.name);
+            $('#editemail').val(res.email);
+            $('#editdept').val(res.dept);
+            console.log(res);
+        }
+    });
+}
 
+function delFunc(id){
 $.ajax({
     type: "POST",
     url: "{{ url('/remove') }}",
     data: {id:id},
     dataType: 'json',
-    success: function(response){
-        $('#DataTable').DataTable().ajax.reload();
-    },
+    success: function(res){
+                if (res.status == 201){
+                    Swal.fire({
+                        title: "Account Deleted Successfully",
+                        icon: "success"
+                    });
+                }
+                $('#UserTable').DataTable().ajax.reload();
+                console.log(res);
+            }
 });
 }
 
@@ -247,8 +400,10 @@ $(document).ready(function() {
         success: function(data) {
             // Update dropdown with fetched data
             var departmentDropdown = $('#dept');
+            var departmentDropdown1 = $('#editdept');
             $.each(data, function(index, departments) {
                 departmentDropdown.append('<option value="' + departments.department + '">' + departments.department + '</option>');
+                departmentDropdown1.append('<option value="' + departments.department + '">' + departments.department + '</option>');
             });
         },
         error: function(xhr, status, error) {

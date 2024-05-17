@@ -14,6 +14,7 @@ use Illuminate\Notifications\Notification;
 use App\Notifications\EmailNotification;
 use Illuminate\Support\Facades\Auth;
 use PDF;
+use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
@@ -138,6 +139,24 @@ class AdminController extends Controller
         return response()->json($data);
     }
 
+    public function updateDept(Request $request){
+
+        $ticket_id = $request->editid;
+
+        $user = Departments::where('id', $ticket_id);
+
+        $user->update([
+            'department ' => $request->editdepartment,
+        ]);
+
+        return response()->json([
+            'status' => 201,
+            'data' => $user,
+            //'ticket' => $ticket
+
+        ]);
+    }
+
     public function insert(Request $request){
 
         $ticket = [
@@ -145,7 +164,7 @@ class AdminController extends Controller
             'email' => $request->email,
             'role' => $request->role,
             'dept' => $request->dept,
-            'password' => $request->password,
+            'password' => Hash::make($request->password),
             'status' => 'Active'
         ];
 
@@ -195,7 +214,11 @@ class AdminController extends Controller
         $record = User::findOrFail($id);
         $record->delete();
 
-        return response()->json(['success' => true]);
+        return response()->json([
+            'status' => 201,
+            //'ticket' => $ticket
+
+        ]);
     }
 
     public function Deptremove(Request $request){
@@ -203,7 +226,71 @@ class AdminController extends Controller
         $record = Departments::findOrFail($id);
         $record->delete();
 
-        return response()->json(['success' => true]);
+        return response()->json([
+            'status' => 201,
+            //'ticket' => $ticket
+
+        ]);;
+    }
+
+    public function admin_edit(Request $request){
+
+        $id = $request->id;
+        $data = User::find($id);
+        return response()->json($data);
+    }
+
+    public function admin_update(Request $request){
+
+        $ticket_id = $request->editid;
+
+        $user = User::where('id', $ticket_id);
+        
+        // $ticket = [
+
+        //     'name' => $request->editname,
+        //     'email' => $request->editemail,
+        //     'dept' => $request->editdept,
+        //     'password' => Hash::make($request->editpassword)
+            
+        // ];
+
+        $user->update([
+            'name' => $request->editname,
+            'email' => $request->editemail,
+            'dept' => $request->editdept,
+        ]);
+
+        if ($request->editpassword) {
+            $user->update([
+                'password' => Hash::make($request->editpassword),
+            ]);
+        }
+
+        return response()->json([
+            'status' => 202,
+            'data' => $user,
+            //'ticket' => $ticket
+
+        ]);
+    }
+
+    public function reset(Request $request){
+
+        $ticket_id = $request->id;
+
+        $user = User::where('id', $ticket_id);
+
+        $user->update([
+            'password' => Hash::make('qwerty123')
+        ]);
+
+        return response()->json([
+            'status' => 202,
+            'data' => $user,
+            //'ticket' => $ticket
+
+        ]);
     }
 
     public function main(){
