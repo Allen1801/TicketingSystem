@@ -102,7 +102,7 @@
                     <br>
                     <div class="modal-footer">
                     <!-- <input type="reset" id="btn-clear" class="btn btn-secondary"> -->
-                    <button type="submit" id="btn-save2" class="btn btn-primary">Save changes</button>
+                    <button type="submit" id="btn-save2" class="btn btn-primary">Submit</button>
                     </div>
                 </form>
                 </div>
