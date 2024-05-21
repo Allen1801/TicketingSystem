@@ -14,6 +14,7 @@
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
 
     <!-- Bootstrap -->
+
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
@@ -75,6 +76,42 @@
                                 </li>
                             @endif
                         @else
+
+                            <li class="nav-item dropdown dropdown-notifications">
+
+                            <a id="navbarDropdown" class="btn btn-secondary dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                            <i data-count="0" class="bi bi-bell notification-icon"></i>
+                            <span class="notif-count"></span>
+                                </a>
+
+                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                <div class="dropdown-footer text-center">
+                  <a href="#">Mark all as Read</a>
+                </div>
+                                </div>
+
+
+                            <!-- <li class="dropdown dropdown-notifications">
+              <a href="#notifications-panel" class="dropdown-toggle" data-toggle="dropdown">
+                <i data-count="0" class="bi bi-bell notification-icon"></i>
+              </a>
+
+              <div class="dropdown-container">
+                <div class="dropdown-toolbar">
+                  <div class="dropdown-toolbar-actions">
+                    <a href="#">Mark all as read</a>
+                  </div>
+                  <h3 class="dropdown-toolbar-title">Notifications (<span class="notif-count">0</span>)</h3>
+                </div>
+                <ul class="dropdown-menu">
+                </ul>
+                <div class="dropdown-footer text-center">
+                  <a href="#">View All</a>
+                </div>
+              </div>
+            </li> -->
+                            </li>
+
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }}

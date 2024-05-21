@@ -53,6 +53,12 @@ TODO://NOTIFICATION
 }
   });
 
+    var notificationsWrapper   = $('.dropdown-notifications');
+    var notificationsToggle    = notificationsWrapper.find('a[data-toggle]');
+    var notificationsCountElem = notificationsToggle.find('i[data-count]');
+    var notificationsCount     = parseInt(notificationsCountElem.data('count'));
+    var notifications          = notificationsWrapper.find('div.dropdown-menu');
+
 Pusher.logToConsole = true;
 
 var pusher = new Pusher('d2bb2b51e17bf488dfb1', {
@@ -60,6 +66,17 @@ var pusher = new Pusher('d2bb2b51e17bf488dfb1', {
 });
 var channel = pusher.subscribe('my-channel');
     channel.bind('my-event', function(message) {
+        var existingNotifications = notifications.html();
+        var newNotificationHtml = `
+        <li class="dropdown-item">`+message+`</>
+        `;
+        notifications.html(newNotificationHtml + existingNotifications);
+
+        notificationsCount += 1;
+        notificationsCountElem.attr('data-count', notificationsCount);
+        notificationsWrapper.find('.notif-count').text(notificationsCount);
+        notificationsWrapper.show();
+        
         // alert(JSON.stringify(data));
         toastr.info(JSON.stringify(message));
         // notify()success(JSON.stringify(data));
