@@ -20,20 +20,38 @@ class CustomerController extends Controller
 {
 
     public function usermain(){
-        // Counting the records where 'column_name' equals the given value
-        // $total = CustomerModel::count();
-        // $new = CustomerModel::where('status', 'New')->count();
-        // $inprogress = CustomerModel::where('status', 'Unresolved')->count();
-        // $complete = CustomerModel::where('status', 'Resolved')->count();
-        // $inactive = CustomerModel::where('status', 'Closed')->count();
-        // $open = CustomerModel::where('status', 'Open')->count();
-
-        // return view('index_admin', compact('total', 'new', 'inprogress','complete','inactive', 'open'));
-
         $user = Auth::user();
         $notifications = $user->unreadNotifications;
 
         return view('index_user', ['notifications' => $notifications]);
+    }
+
+        public function respond(Request $request)
+    {
+        $userMessage = $request->input('message');
+        $botResponse = $this->getResponse($userMessage);
+
+        return response()->json(['response' => $botResponse]);
+    }
+
+    private function getResponse($message)
+    {
+        $message = strtolower($message);
+
+        // Simple rule-based responses
+        $responses = [
+            'hello' => 'Hi there! How can I help you today?',
+            'hi' => 'Hello! How can I assist you?',
+            'how are you' => 'I am just a bot, but I am doing great! How about you?',
+            'bye' => 'Goodbye! Have a nice day!',
+            'what is your name?' => 'My name is Jenova, nice to meet you!'
+        ];
+
+        // Default response
+        $defaultResponse = "I'm not sure how to respond to that. Can you please ask something else?";
+
+        // Find a matching response
+        return $responses[$message] ?? $defaultResponse;
     }
 
     public function edit(Request $request)
@@ -159,13 +177,6 @@ class CustomerController extends Controller
     public function survey(){
         return view('survey');
     }
-
-    // protected $sentimentAnalysisService;
-
-    // public function __construct(SentimentAnalysisService $sentimentAnalysisService)
-    // {
-    //     $this->sentimentAnalysisService = $sentimentAnalysisService;
-    // }
 
 
     public function survey_store(Request $request){

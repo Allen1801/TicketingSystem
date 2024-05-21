@@ -26,6 +26,7 @@ Route::post('/updatenote', [CustomerController::class, 'updatenote']);
 Route::get('/image/{id}', [CustomerController::class, 'showImg'])->name('image.show');
 Route::get('/survey', [CustomerController::class, 'survey']);
 Route::post('/survey_store', [CustomerController::class, 'survey_store'])->name('survey_store');
+Route::post('/chatbot', [CustomerController::class, 'respond']);
 
 
 // Datatables Routes
