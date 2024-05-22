@@ -10,6 +10,7 @@
             <div class="card">
                 <div class="card-header">{{__('Notification')}}</div>
                 <div class="card-body ">
+                
                     @forelse($notifications as $notification)
                         <div class="alert alert-success" role="alert">
                             [{{ $notification->created_at }}] User {{ $notification->data['id'] }} {{ $notification->data['message'] }}
@@ -70,21 +71,24 @@ var channel = pusher.subscribe('my-channel');
         var newNotificationHtml = `
         <li class="dropdown-item">`+message+`</>
         `;
+        var x = document.getElementById('notif-sound');
         notifications.html(newNotificationHtml + existingNotifications);
 
         notificationsCount += 1;
-        notificationsCountElem.attr('data-count', notificationsCount);
+        notificationsCountElem.attr('data-count', {{ $notifications->count() }});
         notificationsWrapper.find('.notif-count').text(notificationsCount);
         notificationsWrapper.show();
         
         // alert(JSON.stringify(data));
         toastr.info(JSON.stringify(message));
         // notify()success(JSON.stringify(data));
+        x.autoplay = true;
+        x.load();
     });
 
     setInterval(function() {
-    location.reload();
-}, 60000);
+    // location.reload();
+}, 3000);
 </script>
 
 @endsection

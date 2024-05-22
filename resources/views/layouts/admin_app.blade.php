@@ -80,14 +80,23 @@
                             <li class="nav-item dropdown dropdown-notifications">
 
                             <a id="navbarDropdown" class="btn btn-secondary dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                            <i data-count="0" class="bi bi-bell notification-icon"></i>
-                            <span class="notif-count"></span>
+                            <audio id="notif-sound">
+                                <source src="{{ asset('storage/audio/notiftone.mp3') }}" type="audio/mpeg">
+                                    Your browser does not support the audio element.
+                            </audio>
+                            <i data-count="{{ $notifications->count() }}" class="bi bi-bell notification-icon"></i>
+                            <span class="notif-count">{{ $notifications->count() }}</span>
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                @forelse($notifications as $notification)
+                                    {{ $notification->data['message2'] }}
+                                @empty
+                                    There are no new notifications
+                                @endforelse
                                 <div class="dropdown-footer text-center">
-                  <a href="#">Mark all as Read</a>
-                </div>
+                                    <a href="{{url('/markasread')}}">Mark all as Read</a>
+                                </div>
                                 </div>
 
 

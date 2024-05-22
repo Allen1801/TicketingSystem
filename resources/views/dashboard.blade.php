@@ -270,6 +270,7 @@ var channel = pusher.subscribe('my-channel');
         var newNotificationHtml = `
         <li class="dropdown-item">`+message+`</>
         `;
+        var x = document.getElementById('notif-sound');
         notifications.html(newNotificationHtml + existingNotifications);
 
         notificationsCount += 1;
@@ -280,6 +281,8 @@ var channel = pusher.subscribe('my-channel');
         // alert(JSON.stringify(data));
         toastr.info(JSON.stringify(message));
         // notify()success(JSON.stringify(data));
+        x.autoplay = true;
+        x.load();
     });
 
     TODO://CHARTS

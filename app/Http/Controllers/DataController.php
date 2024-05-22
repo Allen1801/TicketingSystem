@@ -23,7 +23,8 @@ class DataController extends Controller
     public function index(){
 
         $post = CustomerModel::select('*')->get();
-
+        $user = Auth::user();
+        $notifications = $user->unreadNotifications;
 
         if(request()->ajax()){
             return datatables()->of($post)
@@ -32,7 +33,7 @@ class DataController extends Controller
             ->addIndexColumn()
             ->make(true);
         }
-        return view('admin');
+        return view('admin', ['notifications' => $notifications]);
     }
 
     public function filter(){
@@ -60,7 +61,8 @@ class DataController extends Controller
     }
 
     public function customer(){
-
+        $user = Auth::user();
+        $notifications = $user->unreadNotifications;
         if(request()->ajax()){
             return datatables()->of(User::where('role', 0))
             ->addColumn('action', 'layouts.adminaction')
@@ -68,12 +70,13 @@ class DataController extends Controller
             ->addIndexColumn()
             ->make(true);
         }
-        return view('users');
+        return view('users', ['notifications' => $notifications]);
 
     }
 
     public function adminusers(){
-
+        $user = Auth::user();
+        $notifications = $user->unreadNotifications;
         if(request()->ajax()){
             return datatables()->of(User::where('role', 1))
             ->addColumn('action', 'layouts.adminaction')
@@ -81,12 +84,13 @@ class DataController extends Controller
             ->addIndexColumn()
             ->make(true);
         }
-        return view('admin-users');
+        return view('admin-users', ['notifications' => $notifications]);
 
     }
 
     public function department(){
-
+        $user = Auth::user();
+        $notifications = $user->unreadNotifications;
         if(request()->ajax()){
             return datatables()->of(Departments::select('*'))
             ->addColumn('action', 'layouts.adminaction')
@@ -94,13 +98,15 @@ class DataController extends Controller
             ->addIndexColumn()
             ->make(true);
         }
-        return view('department');
+        return view('department',['notifications' => $notifications]);
 
     }
 
      // TODO:CHARTS AND ANALYTICS
 
      public function records(){
+        $user = Auth::user();
+        $notifications = $user->unreadNotifications;
         // Counting the records where 'column_name' equals the given value
         $total = CustomerModel::count();
         $new = CustomerModel::where('status', 'New')->count();
@@ -112,7 +118,7 @@ class DataController extends Controller
         $positive = SurveyModel::where('sentiment', 'positive')->count();
         $negative = SurveyModel::where('sentiment', 'negative')->count();
 
-        return view('dashboard', compact('total', 'new', 'inprogress','complete','inactive', 'open', 'survey', 'positive', 'negative'));
+        return view('dashboard', compact('total', 'new', 'inprogress','complete','inactive', 'open', 'survey', 'positive', 'negative'), ['notifications' => $notifications]);
         
     }
 
